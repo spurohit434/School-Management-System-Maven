@@ -1,0 +1,134 @@
+Features of SOAP APIs:
+
+1. Protocol Independence
+Works over multiple transport protocols (HTTP, SMTP, TCP, etc.).
+Flexibility in how data is transmitted between systems.
+Can work with HTTP/HTTPS (SSL/TLS), SMTP, FTP, JMS (Java Msg service) -> supports asynchronous commn, TCP, WebSockets (msg exchange constantly)
+
+2. Extensibility
+SOAP allows the addition of new features through headers without affecting the core message structure.
+Supports security, transactions, and more through extensible modules of the WS standard protocols.
+WS security
+WS reliable mesaging 
+WS atomic transactions
+
+3. Standardized Format
+Uses XML for a highly structured and platform-independent message format.
+Ensures that SOAP messages can be read and processed on any platform. and the soap messages are 
+stored inside an enveloped message.
+each message has 4 functions:
+1. envelope
+2. header
+3. body
+4. fault
+
+4. Security
+Includes strategies and practices for preventingn unauthorized access to SOAP messages and user info.
+WS security is the key element in ensuring the SOAP security.
+Built-in support for WS-Security for message integrity, confidentiality, and authentication.
+Suitable for applications requiring secure data transmission.
+Key components include : Security Header, Tokens, Message Signing and Encryption
+WS security methods includes:
+1. Digital Signatures ( use of elements like <Signature>,<signedInfo>,<KeyInfo> and hash of message (SHA - 256)), (ensures that data is not tampered during the transmission)
+2. XML encryption ( use of the elements like <EncryptedData>,<EncryptedKey>,<KeyInfo> and encryption alogs(AES,RSA))
+3. X.509 certificates (format for public key certificates used in many internet protocols, including TLS/SSL which is basis for HTTPS. binds an indentity to a public key using a digital sign)
+4. Security tokens (used to authenticate & authorize users, here we use the <Security> element)
+5. SAML for SSO id logins (Security assertios markup language)
+In the SAMl we have the Client, Service Provider and Identity Provider. Here when the client want to access the services from the SP, he can do so 
+without actual authentication because here we have authenticated the user and the IP sends an assertion format to the SP, indicating the SSO (single sign on)
+and granting the access to services.
+By using them we ensure the input validation, sanitization, access control, authentication configuring for all endpoints
+
+
+5. Stateful and Stateless Operations
+Can support both stateless (like REST) and stateful operations, allowing sessions and maintaining the context between requests.
+
+6. ACID Compliance for Transactions
+Supports Atomicity, Consistency, Isolation, Durability (ACID) properties in transactional operations.
+Ensures reliable transaction management in critical systems using WS-AtomicTransaction.
+SOAP Headers for WS-AtomicTransaction
+In SOAP messages, WS-AtomicTransaction works via specific SOAP headers that handle coordination. These headers include:
+CoordinationContext: This is added to the SOAP message to identify the transaction context. It is passed along to all services that participate in the transaction.
+Register: This message is used by the participant to register itself with the coordinator for the transaction.
+Prepare, Commit, Rollback: These are messages exchanged between the coordinator and participants during the two-phase commit protocol.
+2 Phase commit across distributed resources.
+
+7. Built-in Error Handling
+Provides standardized error reporting using SOAP Faults.
+Clear, structured error messages for better debugging and troubleshooting.
+Can customize the soap faults
+Common faults includes: Client, server, versionMatch, MustUnderstand
+
+8. WSDL Integration (Web Services Description Language)
+They are the XML descriptions of a web service that SOAP APIs continually use.
+Defines clear contracts between service providers and consumers.
+Ensures all parties understand the interface and operations for seamless communication.
+WSDL is an XML based description language that is used for describing the functionality offered by a
+web service.
+
+9. Reliability
+SOAP can guarantee message delivery through protocols like WS-ReliableMessaging.
+Suitable for systems where message loss is unacceptable.
+
+
+
+
+Benefits of SOAP APIs:
+
+Extensibility. 
+SOAP APIs are highly extensible due to their use of XML-based standards, allowing for easy incorporation of additional features like security and transactions. 
+SOAP provides a suite of extensions through the WS- standards*, which include:
+WS-Security.
+WS-ReliableMessaging.
+WS-AtomicTransaction. ( here we use the concept of 2 phase commit 2PC(atomic commitment protocol), defines where to commit and rollback and here we have the coordinator and participant)
+Support for multiple protocols.
+HTTP for communication, SOAP is not dependent on any specific protocol and can even use the features provided by SMTP.
+
+Secure.
+SOAP prevents unauthorized users from gaining access to important data. To do this, it uses Web Standards (WS) Security that regulates the authentication procedures, including passwords, encryption, tokens, and other advanced security features.
+
+More reliable transactions.
+SOAP is more secure than REST because it uses encryption to protect the transfer of data, making it more reliable. SOAP APIs prevent message corruption or unauthorized access.
+
+Works well in distributed environments.
+SOAP is designed for distributed enterprise environments. Its reliance on standard protocols and XML messaging allows for Interoperability, Loose Coupling and Reliability.
+Here we use the concept of the WS-coordination 
+
+Built in error handling features.
+SOAP provides built-in error handling features primarily through the use of the <Fault> element in its message structure and the standardized error reporting.
+
+
+
+
+Disadvantages of SOAP APIs
+
+Slower than REST APIs.
+SOAP messages can be quite large due to their verbose XML-based structure, which can lead to greater bandwidth usage and slower performance.
+
+Requires more bandwidth.
+SOAP messages are typically larger than those used in REST APIs due to their XML format, which includes extensive markup and metadata. This increased size can lead to higher bandwidth consumption
+
+Does not support caching.
+SOAP does not inherently support caching mechanisms, which can lead to unnecessary load on servers for frequently accessed resources. This lack of caching can negatively impact performance and scalability.
+Not supported because:
+1. Stateful and transactional nature
+2. Complex and customizable soap envelope
+3. More emphasized on security
+4. Soap messages are verbose
+
+Complex to implement and use.
+Implementing SOAP requires a solid understanding of various standards (like WSDL, XML, and WS-* specifications), which can make development more complex.
+
+No flexibility.
+SOAP APIs are bound by strict standards and protocols, which can limit flexibility in design and implementation. 
+
+
+
+
+
+
+
+
+
+
+

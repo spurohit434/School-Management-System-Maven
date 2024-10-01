@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificationDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.dao</a> &gt; <span class="el_source">NotificationDAO.java</span></div><h1>NotificationDAO.java</h1><pre class="source lang-java linenums">package com.wg.dao;
+
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.wg.constants.NotificationConstants;
+import com.wg.model.Notification;
+
+public class NotificationDAO extends GenericDAO&lt;Notification&gt; {
+
+	public NotificationDAO() {
+<span class="fc" id="L14">		super();</span>
+<span class="fc" id="L15">	}</span>
+
+	@Override
+	protected Notification mapResultSetToEntity(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L19">		Notification notification = new Notification();</span>
+<span class="fc" id="L20">		notification.setNotificationId(resultSet.getString(NotificationConstants.NOTIFICATION_ID_COLUMN));</span>
+<span class="fc" id="L21">		notification.setUserId(resultSet.getString(NotificationConstants.USER_ID_COLUMN));</span>
+<span class="fc" id="L22">		notification.setType(resultSet.getString(NotificationConstants.TITLE_COLUMN));</span>
+<span class="fc" id="L23">		notification.setDescription(resultSet.getString(NotificationConstants.MESSAGE_COLUMN));</span>
+<span class="fc" id="L24">		notification.setDateIssued(resultSet.getDate(NotificationConstants.DATE_COLUMN).toLocalDate());</span>
+<span class="fc" id="L25">		return notification;</span>
+	}
+
+	public boolean sendNotification(Notification notification) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L29">		String sendNotificationQuery = String.format(</span>
+				&quot;Insert into Notification (notificationId, userId, type ,description,dateIssued) values ('%s','%s','%s','%s','%s')&quot;,
+<span class="fc" id="L31">				notification.getNotificationId(), notification.getUserId(), notification.getType(),</span>
+<span class="fc" id="L32">				notification.getDescription(), Date.valueOf(notification.getDateIssued()));</span>
+<span class="fc" id="L33">		return executeQuery(sendNotificationQuery);</span>
+	}
+
+	public List&lt;Notification&gt; readNotifications(String userId) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L37">		String readNotificationQuery = String.format(&quot;SELECT * FROM Notification WHERE userId = '%s'&quot;, userId);</span>
+<span class="fc" id="L38">		return executeGetAllQuery(readNotificationQuery);</span>
+	}
+
+	public List&lt;Notification&gt; getAllNotifications() throws ClassNotFoundException, SQLException {
+<span class="fc" id="L42">		String query = &quot;SELECT * FROM &quot; + NotificationConstants.NOTIFICATION_TABLE_NAME;</span>
+<span class="fc" id="L43">		return executeGetAllQuery(query);</span>
+	}
+
+	public Notification getNotificationById(String notificationId) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L47">		String query = String.format(&quot;SELECT * FROM %s WHERE %s = '%s'&quot;, NotificationConstants.NOTIFICATION_TABLE_NAME,</span>
+				NotificationConstants.NOTIFICATION_ID_COLUMN, notificationId);
+<span class="fc" id="L49">		return executeGetQuery(query);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

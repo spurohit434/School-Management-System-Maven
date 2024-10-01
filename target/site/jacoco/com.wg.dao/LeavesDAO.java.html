@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LeavesDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.dao</a> &gt; <span class="el_source">LeavesDAO.java</span></div><h1>LeavesDAO.java</h1><pre class="source lang-java linenums">package com.wg.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.wg.constants.LeavesConstants;
+import com.wg.model.Leaves;
+import com.wg.model.LeavesStatus;
+
+public class LeavesDAO extends GenericDAO&lt;Leaves&gt; {
+
+	public LeavesDAO() {
+<span class="fc" id="L14">		super();</span>
+<span class="fc" id="L15">	}</span>
+
+	@Override
+	protected Leaves mapResultSetToEntity(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L19">		Leaves leave = new Leaves();</span>
+<span class="fc" id="L20">		leave.setLeaveId(resultSet.getString(LeavesConstants.ID_COLUMN));</span>
+<span class="fc" id="L21">		leave.setUserId(resultSet.getString(LeavesConstants.USER_ID_COLUMN));</span>
+<span class="fc" id="L22">		leave.setContent(resultSet.getString(LeavesConstants.CONTENT_COLUMN));</span>
+<span class="fc" id="L23">		leave.setStatus(LeavesStatus.valueOf(resultSet.getString(LeavesConstants.STATUS_COLUMN)));</span>
+<span class="fc" id="L24">		leave.setStartDate(resultSet.getDate(LeavesConstants.START_DATE_COLUMN).toLocalDate());</span>
+<span class="fc" id="L25">		leave.setEndDate(resultSet.getDate(LeavesConstants.END_DATE_COLUMN).toLocalDate());</span>
+<span class="fc" id="L26">		return leave;</span>
+	}
+
+	public boolean approveLeave(String userId) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L30">		String updateSQL = String.format(&quot;UPDATE Leaves SET status = '%s' WHERE userId = '%s'&quot;,</span>
+<span class="fc" id="L31">				LeavesStatus.Approved.toString(), userId);</span>
+<span class="fc" id="L32">		return executeQuery(updateSQL);</span>
+	}
+
+	public boolean rejectLeave(String userId) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L36">		String updateSQL = String.format(&quot;UPDATE Leaves SET status = '%s' WHERE userId = '%s'&quot;,</span>
+<span class="fc" id="L37">				LeavesStatus.Rejected.toString(), userId);</span>
+<span class="fc" id="L38">		return executeQuery(updateSQL);</span>
+	}
+
+	public void applyLeave(Leaves leave) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L42">		String query = String.format(&quot;SELECT * FROM %s where userId = '%s' and status = '%s'&quot;,</span>
+<span class="fc" id="L43">				LeavesConstants.LEAVES_TABLE_NAME, leave.getUserId(), LeavesStatus.Pending.toString());</span>
+<span class="fc" id="L44">		List&lt;Leaves&gt; leaves = executeGetAllQuery(query);</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">		if (!leaves.isEmpty()) {</span>
+<span class="nc" id="L46">			System.out.println(&quot;Leave request already applied. Can not request again&quot;);</span>
+		} else {
+<span class="fc" id="L48">			String insertSQL = String.format(</span>
+					&quot;INSERT INTO %s (%s, %s, %s, %s, %s, %s) &quot; + &quot;VALUES ('%s', '%s', '%s', '%s','%s','%s')&quot;,
+					LeavesConstants.LEAVES_TABLE_NAME, LeavesConstants.ID_COLUMN, LeavesConstants.USER_ID_COLUMN,
+					LeavesConstants.CONTENT_COLUMN, LeavesConstants.START_DATE_COLUMN, LeavesConstants.END_DATE_COLUMN,
+<span class="fc" id="L52">					LeavesConstants.STATUS_COLUMN, leave.getLeaveId(), leave.getUserId(), leave.getContent(),</span>
+<span class="fc" id="L53">					leave.getStartDate(), leave.getEndDate(), leave.getStatus().toString());</span>
+<span class="fc" id="L54">			boolean flag = executeQuery(insertSQL);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">			if (!flag) {</span>
+<span class="nc" id="L56">				System.out.println(&quot;Leave request was not applied.&quot;);</span>
+			} else {
+<span class="fc" id="L58">				System.out.println(&quot;Leave request successfully applied.&quot;);</span>
+			}
+		}
+<span class="fc" id="L61">	}</span>
+
+	public List&lt;Leaves&gt; viewAllLeave() throws ClassNotFoundException, SQLException {
+<span class="fc" id="L64">		String query = String.format(&quot;SELECT * FROM %s&quot;, LeavesConstants.LEAVES_TABLE_NAME);</span>
+<span class="fc" id="L65">		return executeGetAllQuery(query);</span>
+	}
+
+	public List&lt;Leaves&gt; checkLeaveStatus(String userId) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L69">		List&lt;Leaves&gt; leave = null;</span>
+<span class="fc" id="L70">		String query = String.format(&quot;SELECT * FROM %s WHERE %s = '%s'&quot;, LeavesConstants.LEAVES_TABLE_NAME,</span>
+				LeavesConstants.USER_ID_COLUMN, userId);
+<span class="fc" id="L72">		leave = executeGetAllQuery(query);</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">		if (leave == null) {</span>
+<span class="nc" id="L74">			System.out.println(&quot;Leave Not applied yet&quot;);</span>
+<span class="nc" id="L75">			return leave;</span>
+		}
+<span class="fc" id="L77">		return leave;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

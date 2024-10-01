@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AttendanceController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.controller</a> &gt; <span class="el_source">AttendanceController.java</span></div><h1>AttendanceController.java</h1><pre class="source lang-java linenums">package com.wg.controller;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Scanner;
+
+import com.wg.model.Attendance;
+import com.wg.model.Status;
+import com.wg.services.AttendanceServices;
+
+public class AttendanceController {
+<span class="nc" id="L12">	private final AttendanceServices attendanceService = new AttendanceServices();</span>
+<span class="nc" id="L13">	Scanner scanner = new Scanner(System.in);</span>
+
+//	public AttendanceController(AttendanceServices attendanceService) {
+//		this.attendanceService = attendanceService;
+//	}
+
+<span class="nc" id="L19">	public AttendanceController() {</span>
+<span class="nc" id="L20">	}</span>
+
+	public boolean addAttendance(String studentId, int standard, LocalDate date, Status status) {
+<span class="nc" id="L23">		Attendance attendance = new Attendance(studentId, standard, date, status);</span>
+<span class="nc" id="L24">		return attendanceService.addAttendance(attendance);</span>
+	}
+
+	public List&lt;Attendance&gt; viewAttendanceByStandard(int standard) {
+<span class="nc" id="L28">		List&lt;Attendance&gt; list = null;</span>
+<span class="nc" id="L29">		list = attendanceService.viewAttendanceByStandard(standard);</span>
+<span class="nc" id="L30">		return list;</span>
+	}
+
+	public List&lt;Attendance&gt; viewAttendanceById(String studentId) {
+<span class="nc" id="L34">		List&lt;Attendance&gt; list = null;</span>
+<span class="nc" id="L35">		list = attendanceService.viewAttendanceById(studentId);</span>
+<span class="nc" id="L36">		return list;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

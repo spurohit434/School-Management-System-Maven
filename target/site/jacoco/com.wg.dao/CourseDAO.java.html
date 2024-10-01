@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CourseDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.dao</a> &gt; <span class="el_source">CourseDAO.java</span></div><h1>CourseDAO.java</h1><pre class="source lang-java linenums">package com.wg.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.wg.constants.CourseConstants;
+import com.wg.model.Course;
+
+public class CourseDAO extends GenericDAO&lt;Course&gt; {
+
+<span class="fc" id="L14">	public CourseDAO() {</span>
+<span class="fc" id="L15">	}</span>
+
+	@Override
+	protected Course mapResultSetToEntity(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L19">		Course course = new Course();</span>
+<span class="fc" id="L20">		course.setCourseId(resultSet.getString(CourseConstants.COURSE_ID));</span>
+<span class="fc" id="L21">		course.setCourseName(resultSet.getString(CourseConstants.COURSE_NAME));</span>
+<span class="fc" id="L22">		course.setStandard(resultSet.getInt(CourseConstants.STANDARD));</span>
+<span class="fc" id="L23">		return course;</span>
+	}
+
+	public Course getCourse(String courseId) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L27">		String selectSQL = &quot;SELECT * FROM Course WHERE courseId = \&quot;&quot; + courseId + &quot;\&quot;&quot;;</span>
+<span class="fc" id="L28">		return executeGetQuery(selectSQL);</span>
+	}
+
+	public List&lt;Course&gt; getAllCourses() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L32">		String selectSQL = &quot;SELECT * FROM Course&quot;;</span>
+<span class="fc" id="L33">		return executeGetAllQuery(selectSQL);</span>
+	}
+
+	public boolean deleteCourse(String id) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L37">		String selectSQL = &quot;DELETE FROM Course WHERE courseId = \&quot;&quot; + id + &quot;\&quot;&quot;;</span>
+<span class="fc" id="L38">		return executeQuery(selectSQL);</span>
+	}
+
+	public boolean addCourse(Course course) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L42">		String sqlQuery = String.format(&quot;INSERT INTO Course (courseId, courseName, standard) VALUES ('%s','%s','%s')&quot;,</span>
+<span class="fc" id="L43">				course.getCourseId(), course.getCourseName(), course.getStandard());</span>
+<span class="fc" id="L44">		return executeQuery(sqlQuery);</span>
+	}
+
+	public boolean updateCourse(Course course, String columnToUpdate) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L48">		Map&lt;String, Object&gt; fieldMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L49">		fieldMap.put(&quot;CourseId&quot;, course.getCourseId());</span>
+<span class="fc" id="L50">		fieldMap.put(&quot;CourseName&quot;, course.getCourseName());</span>
+<span class="fc" id="L51">		fieldMap.put(&quot;Standard&quot;, course.getStandard());</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">		if (fieldMap.containsKey(columnToUpdate)) {</span>
+<span class="fc" id="L53">			Object value = fieldMap.get(columnToUpdate);</span>
+<span class="fc" id="L54">			String sqlQuery = String.format(&quot;UPDATE Course SET %s = '%s' WHERE courseId = '%s'&quot;, columnToUpdate, value,</span>
+<span class="fc" id="L55">					course.getCourseId());</span>
+			// System.out.println(sqlQuery);
+<span class="fc" id="L57">			return executeQuery(sqlQuery);</span>
+		}
+<span class="nc" id="L59">		return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

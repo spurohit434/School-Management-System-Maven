@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IssueDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.dao</a> &gt; <span class="el_source">IssueDAO.java</span></div><h1>IssueDAO.java</h1><pre class="source lang-java linenums">package com.wg.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import com.wg.constants.IssueConstants;
+import com.wg.model.Issue;
+import com.wg.model.IssuesStatus;
+
+public class IssueDAO extends GenericDAO&lt;Issue&gt; {
+
+	public IssueDAO() {
+<span class="fc" id="L14">		super();</span>
+<span class="fc" id="L15">	}</span>
+
+	@Override
+	protected Issue mapResultSetToEntity(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L19">		Issue issue = new Issue();</span>
+<span class="fc" id="L20">		issue.setIssueID(resultSet.getString(IssueConstants.ISSUE_ID_COLUMN));</span>
+<span class="fc" id="L21">		issue.setMessage(resultSet.getString(IssueConstants.MESSAGE_COLUMN));</span>
+<span class="fc" id="L22">		issue.setUserId(resultSet.getString(IssueConstants.USER_ID_COLUMN));</span>
+<span class="fc" id="L23">		issue.setStatus(IssuesStatus.valueOf(resultSet.getString(&quot;status&quot;)));</span>
+<span class="fc" id="L24">		issue.setCreatedAt(resultSet.getDate(&quot;createdAt&quot;).toLocalDate());</span>
+<span class="fc" id="L25">		return issue;</span>
+	}
+
+	public Issue getIssueById(String issueId) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L29">		String query = String.format(&quot;SELECT * FROM %s WHERE %s = '%s'&quot;, IssueConstants.ISSUE_TABLE_NAME,</span>
+				IssueConstants.ISSUE_ID_COLUMN, issueId);
+<span class="fc" id="L31">		return executeGetQuery(query);</span>
+	}
+
+	public List&lt;Issue&gt; viewAllIssues() throws ClassNotFoundException, SQLException {
+<span class="fc" id="L35">		String query = String.format(&quot;SELECT * FROM %s&quot;, IssueConstants.ISSUE_TABLE_NAME);</span>
+<span class="fc" id="L36">		return executeGetAllQuery(query);</span>
+	}
+
+	public List&lt;Issue&gt; checkIssueStatus(String userId) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L40">		String query = String.format(&quot;SELECT * FROM %s WHERE %s = '%s'&quot;, IssueConstants.ISSUE_TABLE_NAME,</span>
+				IssueConstants.USER_ID_COLUMN, userId);
+<span class="fc" id="L42">		return executeGetAllQuery(query);</span>
+	}
+
+	public boolean resolveIssue(String userId) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L46">		String query = String.format(&quot;UPDATE Issue SET Status = '%s' WHERE userId = '%s'&quot;,</span>
+<span class="fc" id="L47">				IssuesStatus.RESOLVED.toString(), userId);</span>
+		// System.out.println(query);
+<span class="fc" id="L49">		return executeQuery(query);</span>
+	}
+
+	public boolean raiseIssue(Issue issue) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L53">		String query = String.format(&quot;INSERT INTO %s (%s, %s, %s, %s) &quot; + &quot;VALUES ('%s', '%s', '%s', '%s')&quot;,</span>
+				IssueConstants.ISSUE_TABLE_NAME, IssueConstants.ISSUE_ID_COLUMN, IssueConstants.MESSAGE_COLUMN,
+<span class="fc" id="L55">				IssueConstants.USER_ID_COLUMN, IssueConstants.STATUS_COLUMN, issue.getIssueID(), issue.getMessage(),</span>
+<span class="fc" id="L56">				issue.getUserId(), issue.getStatus().toString());</span>
+<span class="fc" id="L57">		return executeQuery(query);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,16 @@
+com\wg\servicetest\FeeServiceTest.class
+com\wg\daotest\CourseDAOTest.class
+com\wg\daotest\NotificationDAOTest.class
+com\wg\servicetest\AttendanceServicesTest.class
+com\wg\servicetest\NotificationServiceTest.class
+com\wg\servicetest\IssueServiceTest.class
+com\wg\servicetest\UserServiceTest.class
+com\wg\daotest\AttendanceDAOTest.class
+com\wg\servicetest\CourseMarksServiceTest.class
+com\wg\daotest\IssueDAOTest.class
+com\wg\daotest\FeeDAOTest.class
+com\wg\daotest\CourseMarksDAOTest.class
+com\wg\daotest\UserDAOTest.class
+com\wg\servicetest\LeavesServiceTest.class
+com\wg\daotest\LeavesDAOTest.class
+com\wg\servicetest\CourseServiceTest.class

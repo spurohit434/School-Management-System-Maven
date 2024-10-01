@@ -1,0 +1,68 @@
+Sep 19, 2024 10:05:57 PM com.wg.services.AttendanceServices addAttendance
+SEVERE: Query error
+Sep 19, 2024 10:05:57 PM com.wg.services.AttendanceServices viewAttendanceByStandard
+SEVERE: Query error
+Sep 19, 2024 10:05:58 PM com.wg.services.LeavesService checkLeaveStatus
+SEVERE: null
+Sep 19, 2024 10:05:58 PM com.wg.services.LeavesService approveLeave
+SEVERE: null
+Sep 19, 2024 10:05:58 PM com.wg.services.LeavesService applyLeave
+SEVERE: null
+Sep 19, 2024 10:05:58 PM com.wg.services.LeavesService viewAllLeave
+SEVERE: null
+Sep 19, 2024 10:05:58 PM com.wg.services.LeavesService rejectLeave
+SEVERE: null
+Sep 19, 2024 10:05:58 PM com.wg.services.FeeService payFees
+INFO: Fees paid successfully!!
+Sep 19, 2024 10:05:58 PM com.wg.services.UserService authenticateUser
+SEVERE: Cannot invoke "com.wg.model.User.getUserId()" because "user" is null
+Sep 19, 2024 10:05:58 PM com.wg.services.UserService deleteUser
+SEVERE: Database error
+Sep 19, 2024 10:05:58 PM com.wg.services.UserService authenticateUser
+INFO: Authentication successful
+Sep 19, 2024 10:05:58 PM com.wg.services.CourseService getCourse
+SEVERE: Database error
+Sep 19, 2024 10:05:58 PM com.wg.services.CourseService getAllCourses
+SEVERE: Database error
+Sep 19, 2024 10:05:58 PM com.wg.services.CourseService updateCourse
+SEVERE: Database error
+Sep 19, 2024 10:05:58 PM com.wg.services.CourseService addCourse
+SEVERE: Database error
+Sep 19, 2024 10:05:58 PM com.wg.services.CourseService deleteCourse
+SEVERE: Database error
+Sep 20, 2024 1:47:26 PM com.wg.services.UserService authenticateUser
+INFO: Authentication successful
+Sep 23, 2024 10:20:07 AM com.wg.services.AttendanceServices addAttendance
+SEVERE: Query error
+Sep 23, 2024 10:20:07 AM com.wg.services.AttendanceServices viewAttendanceByStandard
+SEVERE: Query error
+Sep 23, 2024 10:20:07 AM com.wg.services.CourseService getCourse
+SEVERE: Database error
+Sep 23, 2024 10:20:07 AM com.wg.services.CourseService getAllCourses
+SEVERE: Database error
+Sep 23, 2024 10:20:07 AM com.wg.services.CourseService updateCourse
+SEVERE: Database error
+Sep 23, 2024 10:20:07 AM com.wg.services.CourseService addCourse
+SEVERE: Database error
+Sep 23, 2024 10:20:07 AM com.wg.services.CourseService deleteCourse
+SEVERE: Database error
+Sep 23, 2024 10:20:07 AM com.wg.services.FeeService payFees
+INFO: Fees paid successfully!!
+Sep 23, 2024 10:20:07 AM com.wg.services.LeavesService checkLeaveStatus
+SEVERE: null
+Sep 23, 2024 10:20:07 AM com.wg.services.LeavesService approveLeave
+SEVERE: null
+Sep 23, 2024 10:20:07 AM com.wg.services.LeavesService applyLeave
+SEVERE: null
+Sep 23, 2024 10:20:07 AM com.wg.services.LeavesService viewAllLeave
+SEVERE: null
+Sep 23, 2024 10:20:07 AM com.wg.services.LeavesService rejectLeave
+SEVERE: null
+Sep 23, 2024 10:20:07 AM com.wg.services.UserService authenticateUser
+SEVERE: Cannot invoke "com.wg.model.User.getUserId()" because "user" is null
+Sep 23, 2024 10:20:07 AM com.wg.services.UserService deleteUser
+SEVERE: Database error
+Sep 23, 2024 10:20:07 AM com.wg.services.UserService authenticateUser
+INFO: Authentication successful
+Oct 01, 2024 3:04:16 PM com.wg.services.UserService authenticateUser
+INFO: Authentication successful

@@ -1,0 +1,987 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminUI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.ui</a> &gt; <span class="el_source">AdminUI.java</span></div><h1>AdminUI.java</h1><pre class="source lang-java linenums">package com.wg.ui;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+import java.util.UUID;
+
+import com.wg.app.App;
+import com.wg.constants.StandardWiseCourse;
+import com.wg.constants.StringConstants;
+import com.wg.controller.AttendanceController;
+import com.wg.controller.CourseController;
+import com.wg.controller.CourseMarksController;
+import com.wg.controller.FeeController;
+import com.wg.controller.IssueController;
+import com.wg.controller.LeavesController;
+import com.wg.controller.NotificationController;
+import com.wg.controller.UserController;
+import com.wg.helper.InvalidFeeAmountException;
+import com.wg.helper.PasswordUtil;
+import com.wg.helper.PasswordValidator;
+import com.wg.helper.Validator;
+import com.wg.model.Course;
+import com.wg.model.Issue;
+import com.wg.model.Notification;
+import com.wg.model.User;
+import com.wg.printer.CoursePrinter;
+import com.wg.printer.IssuePrinter;
+import com.wg.printer.UserPrinter;
+
+<span class="nc" id="L34">public class AdminUI extends BaseUI {</span>
+<span class="nc" id="L35">	UserController userController = new UserController();</span>
+<span class="nc" id="L36">	CourseController courseController = new CourseController();</span>
+<span class="nc" id="L37">	AttendanceController attendanceController = new AttendanceController();</span>
+<span class="nc" id="L38">	NotificationController notificationController = new NotificationController();</span>
+<span class="nc" id="L39">	LeavesController leavesController = new LeavesController();</span>
+<span class="nc" id="L40">	IssueController issueController = new IssueController();</span>
+<span class="nc" id="L41">	CourseMarksController courseMarksController = new CourseMarksController();</span>
+<span class="nc" id="L42">	FeeController feeController = new FeeController();</span>
+<span class="nc" id="L43">	Scanner scanner = new Scanner(System.in);</span>
+
+	public void manageUser() {
+		while (true) {
+<span class="nc" id="L47">			System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L48">			System.out.println(StringConstants.MANAGE_USER);</span>
+<span class="nc" id="L49">			System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L50">			System.out.println(StringConstants.ENTER_YOUR_CHOICE);</span>
+<span class="nc" id="L51">			int choice = Validator.getUserChoice();</span>
+<span class="nc bnc" id="L52" title="All 8 branches missed.">			switch (choice) {</span>
+			case 1:
+<span class="nc" id="L54">				addUser();</span>
+<span class="nc" id="L55">				break;</span>
+			case 2:
+<span class="nc" id="L57">				getUserById();</span>
+<span class="nc" id="L58">				break;</span>
+			case 3:
+<span class="nc" id="L60">				getUserByUsername();</span>
+<span class="nc" id="L61">				break;</span>
+			case 4:
+<span class="nc" id="L63">				getAllUser();</span>
+<span class="nc" id="L64">				break;</span>
+			case 5:
+<span class="nc" id="L66">				deleteUser();</span>
+<span class="nc" id="L67">				break;</span>
+			case 6:
+<span class="nc" id="L69">				updateUser();</span>
+<span class="nc" id="L70">				break;</span>
+			case 7:
+<span class="nc" id="L72">				return;</span>
+			default:
+<span class="nc" id="L74">				System.out.println(StringConstants.ENTER_VALID_CHOICE);</span>
+			}
+<span class="nc" id="L76">		}</span>
+	}
+
+	public void manageFees() {
+		while (true) {
+<span class="nc" id="L81">			System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L82">			System.out.println(StringConstants.MANAGE_FEES);</span>
+<span class="nc" id="L83">			System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L84">			System.out.println(StringConstants.ENTER_YOUR_CHOICE);</span>
+<span class="nc" id="L85">			int choice = Validator.getUserChoice();</span>
+<span class="nc bnc" id="L86" title="All 4 branches missed.">			switch (choice) {</span>
+			case 1:
+<span class="nc" id="L88">				addFees();</span>
+<span class="nc" id="L89">				break;</span>
+			case 2:
+<span class="nc" id="L91">				calculateFine();</span>
+<span class="nc" id="L92">				break;</span>
+			case 3:
+<span class="nc" id="L94">				return;</span>
+			default:
+<span class="nc" id="L96">				System.out.println(StringConstants.ENTER_VALID_CHOICE);</span>
+			}
+<span class="nc" id="L98">		}</span>
+	}
+
+	public void manageLeaves(String role) {
+		while (true) {
+<span class="nc" id="L103">			System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L104">			System.out.println(StringConstants.MANAGE_LEAVES_MENU);</span>
+<span class="nc" id="L105">			System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L106">			System.out.println(StringConstants.ENTER_YOUR_CHOICE);</span>
+<span class="nc" id="L107">			int choice = Validator.getUserChoice();</span>
+<span class="nc bnc" id="L108" title="All 5 branches missed.">			switch (choice) {</span>
+			case 1:
+<span class="nc" id="L110">				viewAllLeave();</span>
+<span class="nc" id="L111">				break;</span>
+			case 2:
+<span class="nc" id="L113">				approveLeave(role);</span>
+<span class="nc" id="L114">				break;</span>
+			case 3:
+<span class="nc" id="L116">				rejectLeave(role);</span>
+<span class="nc" id="L117">				break;</span>
+			case 4:
+<span class="nc" id="L119">				return;</span>
+			default:
+<span class="nc" id="L121">				System.out.println(StringConstants.ENTER_VALID_CHOICE);</span>
+			}
+<span class="nc" id="L123">		}</span>
+	}
+
+	public void manageIssues() {
+		while (true) {
+<span class="nc" id="L128">			System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L129">			System.out.println(StringConstants.MANAGE_ISSUES_MENU);</span>
+<span class="nc" id="L130">			System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L131">			System.out.println(StringConstants.ENTER_YOUR_CHOICE);</span>
+<span class="nc" id="L132">			int choice = Validator.getUserChoice();</span>
+<span class="nc bnc" id="L133" title="All 4 branches missed.">			switch (choice) {</span>
+			case 1:
+<span class="nc" id="L135">				viewAllIssues();</span>
+<span class="nc" id="L136">				break;</span>
+			case 2:
+<span class="nc" id="L138">				resolveIssue();</span>
+<span class="nc" id="L139">				break;</span>
+			case 3:
+<span class="nc" id="L141">				return;</span>
+			default:
+<span class="nc" id="L143">				System.out.println(StringConstants.ENTER_VALID_CHOICE);</span>
+			}
+<span class="nc" id="L145">		}</span>
+	}
+
+	public void manageCourse() {
+		while (true) {
+<span class="nc" id="L150">			System.out.println(StringConstants.MANAGE_COURSES_MENU);</span>
+<span class="nc" id="L151">			System.out.println(StringConstants.ENTER_YOUR_CHOICE);</span>
+<span class="nc" id="L152">			int choice = Validator.getUserChoice();</span>
+<span class="nc bnc" id="L153" title="All 7 branches missed.">			switch (choice) {</span>
+			case 1:
+<span class="nc" id="L155">				addCourse();</span>
+<span class="nc" id="L156">				break;</span>
+			case 2:
+<span class="nc" id="L158">				getCourse();</span>
+<span class="nc" id="L159">				break;</span>
+			case 3:
+<span class="nc" id="L161">				deleteCourse();</span>
+<span class="nc" id="L162">				break;</span>
+			case 4:
+<span class="nc" id="L164">				updateCourse();</span>
+<span class="nc" id="L165">				break;</span>
+			case 5:
+<span class="nc" id="L167">				getAllCourses();</span>
+<span class="nc" id="L168">				break;</span>
+			case 6:
+<span class="nc" id="L170">				return;</span>
+			default:
+<span class="nc" id="L172">				System.out.println(StringConstants.ENTER_VALID_CHOICE);</span>
+			}
+<span class="nc" id="L174">		}</span>
+	}
+
+	public void manageAttendance() {
+		while (true) {
+<span class="nc" id="L179">			System.out.println(StringConstants.MANAGE_ATTENDANCE_MENU);</span>
+<span class="nc" id="L180">			System.out.println(StringConstants.ENTER_YOUR_CHOICE);</span>
+<span class="nc" id="L181">			int choice = Validator.getUserChoice();</span>
+<span class="nc bnc" id="L182" title="All 5 branches missed.">			switch (choice) {</span>
+			case 1:
+<span class="nc" id="L184">				addAttendance();</span>
+<span class="nc" id="L185">				break;</span>
+			case 2:
+<span class="nc" id="L187">				viewAttendanceByStandard();</span>
+<span class="nc" id="L188">				break;</span>
+			case 3:
+<span class="nc" id="L190">				viewAttendanceById();</span>
+<span class="nc" id="L191">				break;</span>
+			case 4:
+<span class="nc" id="L193">				return;</span>
+			default:
+<span class="nc" id="L195">				System.out.println(StringConstants.ENTER_VALID_CHOICE);</span>
+			}
+<span class="nc" id="L197">		}</span>
+	}
+
+	public void getAllCourses() {
+<span class="nc" id="L201">		List&lt;Course&gt; list = courseController.getAllCourses();</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">		if (list.isEmpty()) {</span>
+<span class="nc" id="L203">			System.out.println(StringConstants.NO_COURSES_FOUND);</span>
+<span class="nc" id="L204">			return;</span>
+		}
+<span class="nc" id="L206">		CoursePrinter.printCourseDetails(list);</span>
+<span class="nc" id="L207">	}</span>
+
+	public void updateCourse() {
+<span class="nc" id="L210">		List&lt;Course&gt; course = courseController.getAllCourses();</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">		if (course.isEmpty()) {</span>
+<span class="nc" id="L212">			System.out.println(StringConstants.NO_COURSES_FOUND);</span>
+<span class="nc" id="L213">			return;</span>
+		}
+<span class="nc" id="L215">		int index = 0;</span>
+<span class="nc" id="L216">		CoursePrinter.printCourseDetails(course);</span>
+<span class="nc" id="L217">		System.out.println(StringConstants.ENTER_THE_USER_INDEX);</span>
+<span class="nc" id="L218">		boolean validateIndex = false;</span>
+<span class="nc" id="L219">		int limit = course.size();</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L222">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L224">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L226">					System.out.println(StringConstants.ENTER_VALID_USER_INDEX);</span>
+<span class="nc" id="L227">					validateIndex = false;</span>
+				}
+<span class="nc" id="L229">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L230">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L231">				scanner.next();</span>
+<span class="nc" id="L232">			}</span>
+		}
+<span class="nc" id="L234">		String courseId = course.get(index - 1).getCourseId();</span>
+<span class="nc" id="L235">		courseController.updateCourse(courseId);</span>
+<span class="nc" id="L236">	}</span>
+
+	public void deleteCourse() {
+<span class="nc" id="L239">		List&lt;Course&gt; list = courseController.getAllCourses();</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">		if (list.isEmpty()) {</span>
+<span class="nc" id="L241">			System.out.println(StringConstants.NO_COURSES_FOUND);</span>
+<span class="nc" id="L242">			return;</span>
+		}
+<span class="nc" id="L244">		int index = 0;</span>
+<span class="nc" id="L245">		CoursePrinter.printCourseDetails(list);</span>
+<span class="nc" id="L246">		System.out.println(StringConstants.ENTER_THE_USER_INDEX);</span>
+<span class="nc" id="L247">		boolean validateIndex = false;</span>
+<span class="nc" id="L248">		int limit = list.size();</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L251">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L253">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L255">					System.out.println(StringConstants.ENTER_VALID_USER_INDEX);</span>
+<span class="nc" id="L256">					validateIndex = false;</span>
+				}
+<span class="nc" id="L258">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L259">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L260">				scanner.next();</span>
+<span class="nc" id="L261">			}</span>
+		}
+<span class="nc" id="L263">		String courseId = list.get(index - 1).getCourseId();</span>
+<span class="nc" id="L264">		boolean flag = courseController.deleteCourse(courseId);</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">		if (flag == true) {</span>
+<span class="nc" id="L266">			System.out.println(StringConstants.COURSE_DELETED_SUCCESSFULLY);</span>
+		} else {
+<span class="nc" id="L268">			System.out.println(StringConstants.COURSE_DELETION_UNSUCCESSFUL);</span>
+		}
+<span class="nc" id="L270">	}</span>
+
+	public void addCourse() {
+<span class="nc" id="L273">		boolean validStandard = false;</span>
+<span class="nc" id="L274">		System.out.println(StringConstants.ENTER_THE_STANDARD_1_12);</span>
+<span class="nc" id="L275">		int standard = scanner.nextInt();</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">		while (!validStandard) {</span>
+			try {
+<span class="nc bnc" id="L278" title="All 4 branches missed.">				if (standard &gt;= 1 &amp;&amp; standard &lt;= 12) {</span>
+<span class="nc" id="L279">					validStandard = true;</span>
+				} else {
+<span class="nc" id="L281">					System.out.println(StringConstants.ENTER_VALID_STANDARD_1_12);</span>
+<span class="nc" id="L282">					standard = scanner.nextInt();</span>
+<span class="nc" id="L283">					validStandard = false;</span>
+				}
+<span class="nc" id="L285">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L286">				System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_VALID_INTEGER_FOR_STANDARD2);</span>
+<span class="nc" id="L287">				scanner.next();</span>
+<span class="nc" id="L288">			}</span>
+		}
+
+<span class="nc" id="L291">		int courseCount = StandardWiseCourse.getCourseCount(standard);</span>
+		// for (int count = 0; count &lt; courseCount; count++) {
+<span class="nc" id="L293">		System.out.println(StringConstants.ENTER_COURSE_NAME);</span>
+<span class="nc" id="L294">		String courseName = &quot;&quot;;</span>
+		while (true) {
+			try {
+<span class="nc" id="L297">				courseName = scanner.nextLine();</span>
+<span class="nc" id="L298">				courseName.trim();</span>
+<span class="nc bnc" id="L299" title="All 4 branches missed.">				if (courseName.matches(&quot;^[a-zA-Z\\s]+$&quot;) &amp;&amp; !courseName.isEmpty()) {</span>
+<span class="nc" id="L300">					break;</span>
+				} else {
+<span class="nc" id="L302">					System.out.println(StringConstants.INVALID_INPUT);</span>
+				}
+<span class="nc" id="L304">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L305">				System.out.println(StringConstants.INVALID_INPUT);</span>
+<span class="nc" id="L306">				scanner.next();</span>
+<span class="nc" id="L307">			}</span>
+		}
+<span class="nc" id="L309">		courseController.addCourse(courseName, standard);</span>
+		// }
+<span class="nc" id="L311">	}</span>
+
+	public void getCourse() {
+<span class="nc" id="L314">		List&lt;Course&gt; list = courseController.getAllCourses();</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">		if (list.isEmpty()) {</span>
+<span class="nc" id="L316">			System.out.println(StringConstants.NO_COURSES_FOUND);</span>
+<span class="nc" id="L317">			return;</span>
+		}
+<span class="nc" id="L319">		int index = 0;</span>
+<span class="nc" id="L320">		CoursePrinter.printCourseDetails(list);</span>
+<span class="nc" id="L321">		System.out.println(StringConstants.ENTER_THE_COURSE_INDEX);</span>
+<span class="nc" id="L322">		boolean validateIndex = false;</span>
+<span class="nc" id="L323">		int limit = list.size();</span>
+<span class="nc bnc" id="L324" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L326">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L327" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L328">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L330">					System.out.println(StringConstants.ENTER_VALID_COURSE_INDEX);</span>
+<span class="nc" id="L331">					validateIndex = false;</span>
+				}
+<span class="nc" id="L333">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L334">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L335">				scanner.next();</span>
+<span class="nc" id="L336">			}</span>
+		}
+<span class="nc" id="L338">		String courseId = list.get(index - 1).getCourseId();</span>
+<span class="nc" id="L339">		Course course = courseController.getCourse(courseId);</span>
+<span class="nc" id="L340">		List&lt;Course&gt; singleCourse = new ArrayList&lt;Course&gt;();</span>
+<span class="nc" id="L341">		singleCourse.add(course);</span>
+<span class="nc" id="L342">		CoursePrinter.printCourseDetails(singleCourse);</span>
+<span class="nc" id="L343">	}</span>
+
+	public void resolveIssue() {
+<span class="nc" id="L346">		List&lt;Issue&gt; issue = issueController.viewAllIssues();</span>
+<span class="nc bnc" id="L347" title="All 2 branches missed.">		if (issue.isEmpty()) {</span>
+<span class="nc" id="L348">			System.out.println(StringConstants.NO_ISSUES_FOUND);</span>
+<span class="nc" id="L349">			return;</span>
+		}
+<span class="nc" id="L351">		int index = 1;</span>
+<span class="nc" id="L352">		IssuePrinter.extractedHeader();</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">		for (Issue i : issue) {</span>
+<span class="nc" id="L354">			List&lt;Issue&gt; issueList = new ArrayList&lt;Issue&gt;();</span>
+<span class="nc" id="L355">			String userId = i.getUserId();</span>
+<span class="nc" id="L356">			User user = userController.getUserById(userId);</span>
+<span class="nc" id="L357">			String name = user.getName();</span>
+<span class="nc" id="L358">			String username = user.getUsername();</span>
+<span class="nc" id="L359">			issueList.add(i);</span>
+<span class="nc" id="L360">			IssuePrinter.printIssues1(issueList, name, username, index);</span>
+<span class="nc" id="L361">			index++;</span>
+<span class="nc" id="L362">		}</span>
+<span class="nc" id="L363">		IssuePrinter.extractedFooter();</span>
+<span class="nc" id="L364">		System.out.println(&quot;Enter the Issue index&quot;);</span>
+<span class="nc" id="L365">		boolean validateIndex = false;</span>
+<span class="nc" id="L366">		int limit = issue.size();</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L369">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L370" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L371">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L373">					System.out.println(&quot;Enter valid Issue Index:&quot;);</span>
+<span class="nc" id="L374">					validateIndex = false;</span>
+				}
+<span class="nc" id="L376">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L377">				System.out.println(&quot;Enter valid Issue Index:&quot;);</span>
+<span class="nc" id="L378">				scanner.next();</span>
+<span class="nc" id="L379">			}</span>
+		}
+
+<span class="nc" id="L382">		String userId = issue.get(index - 1).getUserId();</span>
+<span class="nc" id="L383">		String Status = issue.get(index - 1).getStatus().toString();</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">		if (Status.equals(&quot;RESOLVED&quot;)) {</span>
+<span class="nc" id="L385">			System.out.println(&quot;Issue already resolved&quot;);</span>
+<span class="nc" id="L386">			return;</span>
+		}
+<span class="nc" id="L388">		issueController.resolveIssue(userId);</span>
+<span class="nc" id="L389">	}</span>
+
+	public void viewAllIssues() {
+<span class="nc" id="L392">		List&lt;Issue&gt; issue = issueController.viewAllIssues();</span>
+<span class="nc bnc" id="L393" title="All 2 branches missed.">		if (issue.isEmpty()) {</span>
+<span class="nc" id="L394">			System.out.println(StringConstants.NO_ISSUES_FOUND);</span>
+<span class="nc" id="L395">			return;</span>
+		}
+<span class="nc" id="L397">		int index = 1;</span>
+<span class="nc" id="L398">		IssuePrinter.extractedHeader();</span>
+<span class="nc bnc" id="L399" title="All 2 branches missed.">		for (Issue i : issue) {</span>
+<span class="nc" id="L400">			List&lt;Issue&gt; issueList = new ArrayList&lt;Issue&gt;();</span>
+<span class="nc" id="L401">			String userId = i.getUserId();</span>
+<span class="nc" id="L402">			User user = userController.getUserById(userId);</span>
+<span class="nc" id="L403">			String name = user.getName();</span>
+<span class="nc" id="L404">			String username = user.getUsername();</span>
+<span class="nc" id="L405">			issueList.add(i);</span>
+<span class="nc" id="L406">			IssuePrinter.printIssues1(issueList, name, username, index);</span>
+<span class="nc" id="L407">			index++;</span>
+<span class="nc" id="L408">		}</span>
+<span class="nc" id="L409">		IssuePrinter.extractedFooter();</span>
+<span class="nc" id="L410">	}</span>
+
+	public void sendNotification() {
+		try {
+<span class="nc" id="L414">			List&lt;User&gt; users = userController.getAllUser();</span>
+<span class="nc" id="L415">			System.out.println(StringConstants.LIST_OF_ALL_USERS);</span>
+<span class="nc" id="L416">			int index = 0;</span>
+<span class="nc" id="L417">			UserPrinter.printUsers(users);</span>
+
+<span class="nc" id="L419">			System.out.println(StringConstants.ENTER_THE_USER_INDEX2);</span>
+<span class="nc" id="L420">			boolean validateIndex = false;</span>
+<span class="nc" id="L421">			int limit = users.size();</span>
+<span class="nc bnc" id="L422" title="All 2 branches missed.">			while (!validateIndex) {</span>
+<span class="nc" id="L423">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L425">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L427">					System.out.println(StringConstants.ENTER_VALID_USER_INDEX);</span>
+<span class="nc" id="L428">					validateIndex = false;</span>
+				}
+			}
+<span class="nc" id="L431">			String userId = users.get(index - 1).getUserId();</span>
+<span class="nc" id="L432">			System.out.println(StringConstants.ENTER_TITLE);</span>
+<span class="nc" id="L433">			String type = null;// scanner.next();</span>
+<span class="nc" id="L434">			scanner.nextLine();</span>
+			while (true) {
+				try {
+<span class="nc" id="L437">					type = scanner.nextLine();</span>
+<span class="nc bnc" id="L438" title="All 2 branches missed.">					if (type.matches(&quot;[a-zA-Z]+&quot;)) {</span>
+<span class="nc" id="L439">						break; // Exit the loop if valid</span>
+					} else {
+<span class="nc" id="L441">						System.out.println(StringConstants.INVALID_INPUT);</span>
+					}
+<span class="nc" id="L443">				} catch (InputMismatchException e) {</span>
+<span class="nc" id="L444">					System.out.println(StringConstants.INVALID_INPUT);</span>
+<span class="nc" id="L445">					scanner.next();</span>
+<span class="nc" id="L446">				}</span>
+			}
+<span class="nc" id="L448">			System.out.println(StringConstants.ENTER_MESSAGE);</span>
+<span class="nc" id="L449">			String description = null;// scanner.nextLine();</span>
+<span class="nc" id="L450">			String message = scanner.nextLine();</span>
+<span class="nc bnc" id="L451" title="All 2 branches missed.">			while (!Validator.isValidString(message)) {</span>
+<span class="nc" id="L452">				System.out.println(StringConstants.INVALID_INPUT);</span>
+<span class="nc" id="L453">				System.out.println(StringConstants.ENTER_MESSAGE);</span>
+<span class="nc" id="L454">				message = scanner.nextLine();</span>
+			}
+
+//			while (true) {
+//				try {
+//					description = scanner.nextLine();
+//					// Check if the title is alphabetic only
+//					if (description.matches(&quot;[a-zA-Z0-9]+&quot;)) {
+//						break; // Exit the loop if valid
+//					} else {
+//						System.out.println(StringConstants.INVALID_INPUT);
+//					}
+//				} catch (InputMismatchException e) {
+//					System.out.println(StringConstants.INVALID_INPUT);
+//					scanner.next();
+//				}
+//			}
+
+<span class="nc" id="L472">			String randomString = UUID.randomUUID().toString();</span>
+<span class="nc" id="L473">			int desiredLength = 7;</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">			if (desiredLength &gt; randomString.length()) {</span>
+<span class="nc" id="L475">				desiredLength = randomString.length();</span>
+			}
+<span class="nc" id="L477">			String notificationId = randomString.substring(0, desiredLength);</span>
+<span class="nc" id="L478">			LocalDate todayDate = LocalDate.now();</span>
+<span class="nc" id="L479">			notificationId = 'N' + notificationId;</span>
+<span class="nc" id="L480">			Notification notification = new Notification(notificationId, userId, type, description, todayDate);</span>
+<span class="nc" id="L481">			boolean sendStatus = notificationController.sendNotification(notification);</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">			if (sendStatus) {</span>
+<span class="nc" id="L483">				System.out.println(StringConstants.NOTIFICATION_SENT_SUCCESSFULLY);</span>
+			} else {
+<span class="nc" id="L485">				System.out.println(StringConstants.NOTIFICATION_NOT_SENT);</span>
+			}
+<span class="nc" id="L487">		} catch (Exception e) {</span>
+<span class="nc" id="L488">			System.out.println(&quot;An error occurred: &quot; + e.getMessage());</span>
+			// e.printStackTrace();
+<span class="nc" id="L490">		}</span>
+<span class="nc" id="L491">	}</span>
+
+	public void addUser() {
+<span class="nc" id="L494">		System.out.print(StringConstants.ENTER_USERNAME_ALPHA_NUMERIC_4_30_CHARACTERS);</span>
+<span class="nc" id="L495">		String username = null;</span>
+<span class="nc" id="L496">		boolean validUserName = false;</span>
+<span class="nc bnc" id="L497" title="All 2 branches missed.">		while (!validUserName) {</span>
+<span class="nc" id="L498">			username = scanner.next();</span>
+<span class="nc bnc" id="L499" title="All 2 branches missed.">			if (Validator.isValidUsername(username)) {</span>
+<span class="nc" id="L500">				validUserName = true;</span>
+			} else {
+<span class="nc" id="L502">				System.out.println(StringConstants.ENTER_VALID_USERNAME);</span>
+<span class="nc" id="L503">				username = scanner.next();</span>
+<span class="nc" id="L504">				validUserName = false;</span>
+			}
+		}
+
+<span class="nc" id="L508">		System.out.print(StringConstants.ENTER_NAME);</span>
+<span class="nc" id="L509">		String name = null;</span>
+<span class="nc" id="L510">		Boolean validName = false;</span>
+<span class="nc bnc" id="L511" title="All 2 branches missed.">		while (!validName) {</span>
+<span class="nc" id="L512">			name = scanner.next();</span>
+<span class="nc bnc" id="L513" title="All 2 branches missed.">			if (Validator.isValidName(name)) {</span>
+<span class="nc" id="L514">				validName = true;</span>
+			} else {
+<span class="nc" id="L516">				System.out.println(StringConstants.ENTER_VALID_NAME);</span>
+<span class="nc" id="L517">				name = scanner.next();</span>
+<span class="nc" id="L518">				validName = false;</span>
+			}
+		}
+<span class="nc" id="L521">		int age = 0;</span>
+<span class="nc" id="L522">		boolean validInput = false;</span>
+<span class="nc bnc" id="L523" title="All 2 branches missed.">		while (!validInput) {</span>
+<span class="nc" id="L524">			System.out.print(StringConstants.ENTER_AGE);</span>
+			try {
+<span class="nc" id="L526">				age = scanner.nextInt();</span>
+<span class="nc bnc" id="L527" title="All 2 branches missed.">				if (Validator.isValidAge(age)) {</span>
+<span class="nc" id="L528">					validInput = true;</span>
+				} else {
+<span class="nc" id="L530">					System.out.println(StringConstants.INVALID_AGE_ENTER_A_VALID_AGE);</span>
+<span class="nc" id="L531">					validInput = false; // If input is valid, exit loop</span>
+				}
+<span class="nc" id="L533">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L534">				System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_VALID_INTEGER_FOR_AGE);</span>
+<span class="nc" id="L535">				scanner.next(); // Clear invalid input</span>
+<span class="nc" id="L536">			}</span>
+		}
+
+<span class="nc" id="L539">		System.out.print(StringConstants.ENTER_PASSWORD);</span>
+<span class="nc" id="L540">		PasswordValidator passwordValidator = new PasswordValidator();</span>
+<span class="nc" id="L541">		String password = null;</span>
+<span class="nc" id="L542">		boolean isValidPassword = false;</span>
+<span class="nc bnc" id="L543" title="All 2 branches missed.">		while (!isValidPassword) {</span>
+<span class="nc" id="L544">			password = scanner.next();</span>
+<span class="nc bnc" id="L545" title="All 2 branches missed.">			if (passwordValidator.isValidPassword(password)) {</span>
+<span class="nc" id="L546">				isValidPassword = true;</span>
+			} else {
+<span class="nc" id="L548">				System.out.println(StringConstants.ENTER_VALID_PASSWORD);</span>
+<span class="nc" id="L549">				isValidPassword = false;</span>
+			}
+		}
+<span class="nc" id="L552">		String hashedPassword = PasswordUtil.hashPassword(password);</span>
+<span class="nc" id="L553">		validInput = false;</span>
+<span class="nc" id="L554">		String email = null;</span>
+<span class="nc" id="L555">		System.out.print(StringConstants.ENTER_EMAIL);</span>
+<span class="nc bnc" id="L556" title="All 2 branches missed.">		while (!validInput) {</span>
+			try {
+<span class="nc" id="L558">				email = scanner.next();</span>
+<span class="nc bnc" id="L559" title="All 2 branches missed.">				if (Validator.isValid(email)) {</span>
+<span class="nc" id="L560">					validInput = true;</span>
+				} else {
+<span class="nc" id="L562">					System.out.print(StringConstants.ENTER_VALID_EMAIL);</span>
+<span class="nc" id="L563">					validInput = false;</span>
+				}
+<span class="nc" id="L565">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L566">				System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_VALID_EMAIL);</span>
+<span class="nc" id="L567">				scanner.next(); // Clear invalid input</span>
+<span class="nc" id="L568">			}</span>
+		}
+
+<span class="nc" id="L571">		String input = &quot;&quot;;</span>
+<span class="nc" id="L572">		boolean validInput1 = false;</span>
+<span class="nc bnc" id="L573" title="All 2 branches missed.">		while (!validInput1) {</span>
+<span class="nc" id="L574">			System.out.print(StringConstants.ENTER_ROLE_STUDENT_FACULTY_CASE_SENSITIVE);</span>
+			try {
+<span class="nc" id="L576">				input = scanner.next().trim();</span>
+<span class="nc" id="L577">				String input1 = input.toUpperCase();</span>
+<span class="nc bnc" id="L578" title="All 2 branches missed.">				if (input1.equals(&quot;STUDENT&quot;)) {</span>
+<span class="nc" id="L579">					input = &quot;Student&quot;;</span>
+<span class="nc" id="L580">					validInput1 = true;</span>
+				}
+<span class="nc bnc" id="L582" title="All 2 branches missed.">				if (input1.equals(&quot;FACULTY&quot;)) {</span>
+<span class="nc" id="L583">					input = &quot;Faculty&quot;;</span>
+<span class="nc" id="L584">					validInput1 = true;</span>
+				}
+<span class="nc bnc" id="L586" title="All 2 branches missed.">				if (input1.equals(&quot;ADMIN&quot;)) {</span>
+<span class="nc" id="L587">					System.out.println(StringConstants.ROLE_CAN_NOT_BE_ADMIN);</span>
+<span class="nc" id="L588">					validInput1 = false;</span>
+				}
+<span class="nc" id="L590">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L591">				System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_VALID_ROLE);</span>
+<span class="nc" id="L592">				scanner.next();</span>
+<span class="nc" id="L593">			}</span>
+		}
+<span class="nc" id="L595">		LocalDate date = null;</span>
+<span class="nc bnc" id="L596" title="All 2 branches missed.">		while (date == null) {</span>
+<span class="nc" id="L597">			System.out.println(StringConstants.ENTER_THE_DATE_OF_BIRTH_YYYY_MM_DD);</span>
+			try {
+<span class="nc" id="L599">				boolean validDate = false;</span>
+<span class="nc bnc" id="L600" title="All 2 branches missed.">				while (!validDate) {</span>
+<span class="nc" id="L601">					String input2 = scanner.next();</span>
+<span class="nc" id="L602">					date = LocalDate.parse(input2);</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">					if (date.isBefore(LocalDate.now())) {</span>
+<span class="nc" id="L604">						validDate = true;</span>
+					} else {
+<span class="nc" id="L606">						validDate = false;</span>
+<span class="nc" id="L607">						System.out.println(StringConstants.PLEASE_ENTER_VALID_DOB_DATE);</span>
+					}
+<span class="nc" id="L609">				}</span>
+<span class="nc" id="L610">			} catch (DateTimeParseException e) {</span>
+<span class="nc" id="L611">				System.out.println(StringConstants.INVALID_DATE_FORMAT);</span>
+<span class="nc" id="L612">			}</span>
+		}
+<span class="nc" id="L614">		String contactNumber = null;</span>
+<span class="nc" id="L615">		System.out.println(StringConstants.ENTER_CONTACT_NUMBER);</span>
+<span class="nc" id="L616">		boolean validNumber = false;</span>
+<span class="nc bnc" id="L617" title="All 2 branches missed.">		while (!validNumber) {</span>
+<span class="nc" id="L618">			contactNumber = scanner.next();</span>
+<span class="nc bnc" id="L619" title="All 2 branches missed.">			if (Validator.isValidContactNo(contactNumber)) {</span>
+<span class="nc" id="L620">				validNumber = true;</span>
+			} else {
+<span class="nc" id="L622">				System.out.println(StringConstants.ENTER_VALID_MOBILE_NUMBER);</span>
+<span class="nc" id="L623">				validNumber = false;</span>
+			}
+		}
+
+<span class="nc" id="L627">		int standard = 0;</span>
+<span class="nc bnc" id="L628" title="All 2 branches missed.">		if (input.equals(StringConstants.STUDENT)) {</span>
+<span class="nc" id="L629">			boolean validStandard1 = false;</span>
+<span class="nc bnc" id="L630" title="All 2 branches missed.">			while (!validStandard1) {</span>
+<span class="nc" id="L631">				System.out.println(StringConstants.ENTER_THE_STANDARD);</span>
+				try {
+<span class="nc" id="L633">					standard = scanner.nextInt(); // Try to read the integer</span>
+<span class="nc bnc" id="L634" title="All 4 branches missed.">					if (standard &gt;= 1 &amp;&amp; standard &lt;= 12) {</span>
+<span class="nc" id="L635">						validStandard1 = true; // Input is valid</span>
+					} else {
+<span class="nc" id="L637">						System.out.println(StringConstants.INVALID_INPUT_ENTER_A_NUMBER_BETWEEN_1_AND_12);</span>
+					}
+<span class="nc" id="L639">				} catch (InputMismatchException e) {</span>
+<span class="nc" id="L640">					System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_VALID_INTEGER_FOR_STANDARD);</span>
+<span class="nc" id="L641">					scanner.next(); // Clear the invalid input</span>
+<span class="nc" id="L642">				}</span>
+			}
+		}
+
+<span class="nc" id="L646">		System.out.println(StringConstants.ENTER_THE_GENDER_M_FOR_MALE_F_FOR_FEMALE);</span>
+<span class="nc" id="L647">		String gender = null;</span>
+<span class="nc" id="L648">		boolean validGender = false;</span>
+<span class="nc bnc" id="L649" title="All 2 branches missed.">		while (!validGender) {</span>
+			try {
+<span class="nc" id="L651">				gender = scanner.next();</span>
+<span class="nc bnc" id="L652" title="All 8 branches missed.">				if (gender.equals(&quot;M&quot;) || gender.equals(&quot;F&quot;) || gender.equals(&quot;m&quot;) || gender.equals(&quot;f&quot;)) {</span>
+<span class="nc" id="L653">					validGender = true;</span>
+				} else {
+<span class="nc" id="L655">					System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_VALID_GENDER_M_F);</span>
+<span class="nc" id="L656">					validGender = false;</span>
+				}
+<span class="nc" id="L658">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L659">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L660">				scanner.next();</span>
+<span class="nc" id="L661">			}</span>
+		}
+<span class="nc" id="L663">		gender = gender.toUpperCase();</span>
+
+<span class="nc" id="L665">		String rollNo = null;</span>
+<span class="nc bnc" id="L666" title="All 2 branches missed.">		if (input.equals(StringConstants.STUDENT)) {</span>
+<span class="nc" id="L667">			System.out.println(StringConstants.ENTER_THE_ROLL_NUMBER);</span>
+<span class="nc" id="L668">			boolean validRollNo = false;</span>
+<span class="nc bnc" id="L669" title="All 2 branches missed.">			while (!validRollNo) {</span>
+				try {
+<span class="nc" id="L671">					rollNo = scanner.next();</span>
+<span class="nc bnc" id="L672" title="All 2 branches missed.">					if (Validator.isValidRollNumber(rollNo)) {</span>
+<span class="nc" id="L673">						validRollNo = true;</span>
+					} else {
+<span class="nc" id="L675">						System.out.println(StringConstants.ENTER_VALID_ROLL_NUMBER);</span>
+<span class="nc" id="L676">						validRollNo = false;</span>
+					}
+<span class="nc" id="L678">				} catch (InputMismatchException e) {</span>
+<span class="nc" id="L679">					System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L680">					scanner.next();</span>
+<span class="nc" id="L681">				}</span>
+			}
+		}
+
+<span class="nc" id="L685">		int mentorOf = 0;</span>
+<span class="nc bnc" id="L686" title="All 2 branches missed.">		if (input.equals(StringConstants.FACULTY)) {</span>
+<span class="nc" id="L687">			boolean validStandard = false;</span>
+<span class="nc" id="L688">			System.out.println(StringConstants.ENTER_THE_MENTOR_OF_FIELD_1_12);</span>
+<span class="nc bnc" id="L689" title="All 2 branches missed.">			while (!validStandard) {</span>
+<span class="nc" id="L690">				mentorOf = scanner.nextInt();</span>
+				try {
+<span class="nc bnc" id="L692" title="All 4 branches missed.">					if (mentorOf &gt;= 1 &amp;&amp; mentorOf &lt;= 12) {</span>
+<span class="nc" id="L693">						validStandard = true;</span>
+					} else {
+<span class="nc" id="L695">						System.out.println(StringConstants.ENTER_VALID_FIELD_1_12);</span>
+<span class="nc" id="L696">						validStandard = false;</span>
+					}
+<span class="nc" id="L698">				} catch (InputMismatchException e) {</span>
+<span class="nc" id="L699">					System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_VALID_INTEGER_FOR_MENTOR_OF);</span>
+<span class="nc" id="L700">					scanner.next();</span>
+<span class="nc" id="L701">				}</span>
+			}
+		}
+
+<span class="nc" id="L705">		boolean flag = userController.addUser(username, name, age, hashedPassword, email, input, date, contactNumber,</span>
+				standard, gender, rollNo, mentorOf);
+<span class="nc bnc" id="L707" title="All 2 branches missed.">		if (flag) {</span>
+<span class="nc" id="L708">			System.out.println(StringConstants.USER_ADDED_SUCCESSFULLY);</span>
+		} else {
+<span class="nc" id="L710">			System.out.println(StringConstants.USER_NOT_ADDED);</span>
+		}
+<span class="nc" id="L712">	}</span>
+
+	public void getUserById() {
+<span class="nc" id="L715">		System.out.println(StringConstants.LIST_OF_ALL_USERS);</span>
+<span class="nc" id="L716">		List&lt;User&gt; list = userController.getAllUser();</span>
+<span class="nc bnc" id="L717" title="All 2 branches missed.">		if (list.isEmpty()) {</span>
+<span class="nc" id="L718">			System.out.println(StringConstants.NO_USERS_FOUND3);</span>
+<span class="nc" id="L719">			return;</span>
+		}
+<span class="nc" id="L721">		int index = 0;</span>
+<span class="nc" id="L722">		UserPrinter.printUsers(list);</span>
+<span class="nc" id="L723">		boolean validateIndex = false;</span>
+<span class="nc" id="L724">		int limit = list.size();</span>
+<span class="nc" id="L725">		System.out.println(StringConstants.ENTER_THE_USER_INDEX);</span>
+<span class="nc bnc" id="L726" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L728">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L729" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L730">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L732">					System.out.println(StringConstants.ENTER_VALID_USER_INDEX);</span>
+<span class="nc" id="L733">					validateIndex = false;</span>
+				}
+<span class="nc" id="L735">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L736">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L737">				scanner.next();</span>
+<span class="nc" id="L738">			}</span>
+		}
+<span class="nc" id="L740">		String userId = list.get(index - 1).getUserId();</span>
+<span class="nc" id="L741">		User user = userController.getUserById(userId);</span>
+<span class="nc bnc" id="L742" title="All 2 branches missed.">		if (user == null) {</span>
+<span class="nc" id="L743">			System.out.println(StringConstants.USER_NOT_FOUND);</span>
+<span class="nc" id="L744">			return;</span>
+		}
+<span class="nc" id="L746">		List&lt;User&gt; singleUser = new ArrayList&lt;User&gt;();</span>
+<span class="nc" id="L747">		singleUser.add(user);</span>
+<span class="nc" id="L748">		UserPrinter.printUsers(singleUser);</span>
+<span class="nc" id="L749">	}</span>
+
+	public void getUserByUsername() {
+<span class="nc" id="L752">		System.out.println(StringConstants.LIST_OF_ALL_USERS);</span>
+<span class="nc" id="L753">		List&lt;User&gt; list = userController.getAllUser();</span>
+<span class="nc bnc" id="L754" title="All 2 branches missed.">		if (list.isEmpty()) {</span>
+<span class="nc" id="L755">			System.out.println(StringConstants.NO_USERS_FOUND4);</span>
+<span class="nc" id="L756">			return;</span>
+		}
+<span class="nc" id="L758">		UserPrinter.printUsers(list);</span>
+<span class="nc" id="L759">		System.out.print(StringConstants.ENTER_USER_USERNAME);</span>
+<span class="nc" id="L760">		String username = scanner.next();</span>
+<span class="nc" id="L761">		User user = userController.getUserByUsername(username);</span>
+<span class="nc bnc" id="L762" title="All 2 branches missed.">		if (user == null) {</span>
+<span class="nc" id="L763">			System.out.println(StringConstants.USER_NOT_FOUND);</span>
+<span class="nc" id="L764">			return;</span>
+		}
+<span class="nc" id="L766">		List&lt;User&gt; singleUser = new ArrayList&lt;User&gt;();</span>
+<span class="nc" id="L767">		singleUser.add(user);</span>
+<span class="nc" id="L768">		UserPrinter.printUsers(singleUser);</span>
+<span class="nc" id="L769">	}</span>
+
+	public void getClassDetails() {
+<span class="nc" id="L772">		boolean validStandard1 = false;</span>
+<span class="nc" id="L773">		int standard = 0;</span>
+<span class="nc bnc" id="L774" title="All 2 branches missed.">		while (!validStandard1) {</span>
+<span class="nc" id="L775">			System.out.println(StringConstants.ENTER_THE_STANDARD);</span>
+			try {
+<span class="nc" id="L777">				standard = scanner.nextInt(); // Try to read the integer</span>
+<span class="nc bnc" id="L778" title="All 4 branches missed.">				if (standard &gt;= 1 &amp;&amp; standard &lt;= 12) {</span>
+<span class="nc" id="L779">					validStandard1 = true; // Input is valid</span>
+				} else {
+<span class="nc" id="L781">					System.out.println(StringConstants.INVALID_INPUT_ENTER_A_NUMBER_BETWEEN_1_AND_12);</span>
+				}
+<span class="nc" id="L783">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L784">				System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_VALID_INTEGER_FOR_STANDARD);</span>
+<span class="nc" id="L785">				scanner.next(); // Clear the invalid input</span>
+<span class="nc" id="L786">			}</span>
+		}
+
+<span class="nc" id="L789">		List&lt;User&gt; users = userController.getClassDetails(standard);</span>
+<span class="nc bnc" id="L790" title="All 2 branches missed.">		if (users.isEmpty()) {</span>
+<span class="nc" id="L791">			System.out.println(StringConstants.USERS_NOT_FOUND4);</span>
+<span class="nc" id="L792">			return;</span>
+		}
+<span class="nc" id="L794">		UserPrinter.printUsers(users);</span>
+<span class="nc" id="L795">	}</span>
+
+	public void deleteUser() {
+<span class="nc" id="L798">		List&lt;User&gt; users = userController.getAllUser();</span>
+<span class="nc bnc" id="L799" title="All 2 branches missed.">		if (users.isEmpty()) {</span>
+<span class="nc" id="L800">			System.out.println(StringConstants.NO_USERS_FOUND);</span>
+<span class="nc" id="L801">			return;</span>
+		}
+<span class="nc" id="L803">		System.out.println(StringConstants.LIST_OF_ALL_USERS);</span>
+<span class="nc" id="L804">		int index = 0;</span>
+<span class="nc" id="L805">		UserPrinter.printUsers(users);</span>
+<span class="nc" id="L806">		System.out.println(StringConstants.ENTER_THE_USER_INDEX);</span>
+<span class="nc" id="L807">		boolean validateIndex = false;</span>
+<span class="nc" id="L808">		int limit = users.size();</span>
+<span class="nc bnc" id="L809" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L811">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L812" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L813">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L815">					System.out.println(StringConstants.ENTER_VALID_USER_INDEX);</span>
+<span class="nc" id="L816">					validateIndex = false;</span>
+				}
+<span class="nc" id="L818">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L819">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L820">				scanner.next();</span>
+<span class="nc" id="L821">			}</span>
+		}
+<span class="nc" id="L823">		boolean flag = userController.deleteUser(users.get(index - 1).getUserId());</span>
+<span class="nc bnc" id="L824" title="All 2 branches missed.">		if (flag == true) {</span>
+<span class="nc" id="L825">			System.out.println(StringConstants.USER_DELETED_SUCCESSFULLY);</span>
+		} else {
+<span class="nc" id="L827">			System.out.println(StringConstants.USER_DELETION_UNSUCCESSFUL);</span>
+		}
+<span class="nc" id="L829">	}</span>
+
+	public void getAllUser() {
+<span class="nc" id="L832">		System.out.println(StringConstants.LIST_OF_ALL_USERS);</span>
+<span class="nc" id="L833">		List&lt;User&gt; list = userController.getAllUser();</span>
+<span class="nc bnc" id="L834" title="All 2 branches missed.">		if (list.isEmpty()) {</span>
+<span class="nc" id="L835">			System.out.println(StringConstants.NO_USERS_FOUND);</span>
+<span class="nc" id="L836">			return;</span>
+		}
+<span class="nc" id="L838">		UserPrinter.printUsers(list);</span>
+<span class="nc" id="L839">	}</span>
+
+	public void updateUser() {
+<span class="nc" id="L842">		System.out.println(StringConstants.LIST_OF_ALL_USERS);</span>
+<span class="nc" id="L843">		List&lt;User&gt; list = userController.getAllUser();</span>
+<span class="nc" id="L844">		int index = 0;</span>
+<span class="nc bnc" id="L845" title="All 2 branches missed.">		if (list.isEmpty()) {</span>
+<span class="nc" id="L846">			System.out.println(StringConstants.NO_USERS_FOUND);</span>
+<span class="nc" id="L847">			return;</span>
+		}
+		// List&lt;User&gt; checkedList = new ArrayList&lt;User&gt;();
+		// for(User user: list) {
+//		List&lt;User&gt; checkedList = list.stream().filter(user -&gt; user.getRole().equals(&quot;Admin&quot;))
+//				.collect(Collectors.toList());
+		// }
+//		List&lt;Course&gt; filteredCourses = list.stream().filter(course -&gt; course.getStandard() == standard)
+//				.collect(Collectors.toList());
+
+<span class="nc" id="L857">		UserPrinter.printUsers(list);</span>
+<span class="nc" id="L858">		boolean validateIndex = false;</span>
+<span class="nc" id="L859">		int limit = list.size();</span>
+<span class="nc" id="L860">		System.out.println(StringConstants.ENTER_THE_USER_INDEX);</span>
+<span class="nc bnc" id="L861" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L863">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L864" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L865">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L867">					System.out.println(StringConstants.ENTER_VALID_USER_INDEX);</span>
+<span class="nc" id="L868">					validateIndex = false;</span>
+				}
+<span class="nc" id="L870">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L871">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L872">				scanner.next();</span>
+<span class="nc" id="L873">			}</span>
+		}
+<span class="nc" id="L875">		userController.updateUser(list.get(index - 1).getUserId());</span>
+<span class="nc" id="L876">	}</span>
+
+	public void addFees() {
+<span class="nc" id="L879">		List&lt;User&gt; users = userController.getAllUser();</span>
+<span class="nc bnc" id="L880" title="All 2 branches missed.">		if (users.isEmpty()) {</span>
+<span class="nc" id="L881">			System.out.println(StringConstants.NO_USERS_FOUND);</span>
+<span class="nc" id="L882">			return;</span>
+		}
+<span class="nc" id="L884">		int index = 0;</span>
+<span class="nc" id="L885">		UserPrinter.printUsers(users);</span>
+<span class="nc" id="L886">		System.out.println(StringConstants.ENTER_THE_USER_INDEX);</span>
+<span class="nc" id="L887">		boolean validateIndex = false;</span>
+<span class="nc" id="L888">		int limit = users.size();</span>
+<span class="nc bnc" id="L889" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L891">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L892" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L893">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L895">					System.out.println(StringConstants.ENTER_VALID_USER_INDEX);</span>
+<span class="nc" id="L896">					validateIndex = false;</span>
+				}
+<span class="nc" id="L898">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L899">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L900">				scanner.next();</span>
+<span class="nc" id="L901">			}</span>
+		}
+<span class="nc" id="L903">		String userId = users.get(index - 1).getUserId();</span>
+<span class="nc" id="L904">		User user = userController.getUserById(userId);</span>
+<span class="nc bnc" id="L905" title="All 2 branches missed.">		if (!user.getRole().toString().equals(StringConstants.STUDENT)) {</span>
+<span class="nc" id="L906">			System.out.println(&quot;Enter valid Student UserId&quot;);</span>
+<span class="nc" id="L907">			return;</span>
+		}
+<span class="nc" id="L909">		System.out.println(StringConstants.ENTER_THE_FEE_AMOUNT);</span>
+<span class="nc" id="L910">		double feeAmount = 0;</span>
+<span class="nc bnc" id="L911" title="All 2 branches missed.">		while (feeAmount &lt;= 0) {</span>
+			try {
+<span class="nc" id="L913">				feeAmount = scanner.nextDouble();</span>
+<span class="nc bnc" id="L914" title="All 2 branches missed.">				if (feeAmount &lt;= 0) {</span>
+<span class="nc" id="L915">					System.out.println(StringConstants.ENTER_VALID_FEE_AMOUNT);</span>
+				}
+<span class="nc" id="L917">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L918">				System.out.println(StringConstants.INVALID_INPUT_PLEASE_ENTER_A_NUMERIC_VALUE);</span>
+<span class="nc" id="L919">				scanner.next();</span>
+<span class="nc" id="L920">			} catch (DateTimeParseException | InvalidFeeAmountException e) {</span>
+<span class="nc" id="L921">				e.printStackTrace();</span>
+<span class="nc" id="L922">				throw new InvalidFeeAmountException(StringConstants.FEE_AMOUNT_MUST_BE_GREATER_THAN_ZERO);</span>
+<span class="nc" id="L923">			}</span>
+		}
+<span class="nc" id="L925">		LocalDate date = null;</span>
+<span class="nc" id="L926">		LocalDate date1 = LocalDate.of(2050, 12, 31);</span>
+<span class="nc bnc" id="L927" title="All 2 branches missed.">		while (date == null) {</span>
+<span class="nc" id="L928">			System.out.println(StringConstants.ENTER_THE_DEADLINE_YYYY_MM_DD);</span>
+			try {
+<span class="nc" id="L930">				boolean validDate = false;</span>
+<span class="nc bnc" id="L931" title="All 2 branches missed.">				while (!validDate) {</span>
+<span class="nc" id="L932">					String input2 = scanner.next();</span>
+<span class="nc" id="L933">					date = LocalDate.parse(input2);</span>
+<span class="nc bnc" id="L934" title="All 4 branches missed.">					if (date.isAfter(LocalDate.now()) &amp;&amp; date.isBefore(date1)) {</span>
+<span class="nc" id="L935">						validDate = true;</span>
+					} else {
+<span class="nc" id="L937">						validDate = false;</span>
+<span class="nc" id="L938">						System.out.println(StringConstants.VALID_DEAD_LINE_DATE);</span>
+					}
+<span class="nc" id="L940">				}</span>
+<span class="nc" id="L941">			} catch (DateTimeParseException e) {</span>
+<span class="nc" id="L942">				System.out.println(StringConstants.INVALID_DATE_FORMAT);</span>
+<span class="nc" id="L943">			}</span>
+		}
+<span class="nc" id="L945">		double fineAmount = 0;</span>
+<span class="nc" id="L946">		feeController.addFees(userId, feeAmount, date, fineAmount);</span>
+<span class="nc" id="L947">	}</span>
+
+	public void calculateFine() {
+<span class="nc" id="L950">		List&lt;User&gt; users = userController.getAllUser();</span>
+<span class="nc bnc" id="L951" title="All 2 branches missed.">		if (users.isEmpty()) {</span>
+<span class="nc" id="L952">			System.out.println(StringConstants.NO_USERS_FOUND5);</span>
+<span class="nc" id="L953">			return;</span>
+		}
+<span class="nc" id="L955">		int index = 0;</span>
+<span class="nc" id="L956">		UserPrinter.printUsers(users);</span>
+<span class="nc" id="L957">		System.out.println(StringConstants.ENTER_THE_USER_INDEX);</span>
+<span class="nc" id="L958">		boolean validateIndex = false;</span>
+<span class="nc" id="L959">		int limit = users.size();</span>
+<span class="nc bnc" id="L960" title="All 2 branches missed.">		while (!validateIndex) {</span>
+			try {
+<span class="nc" id="L962">				index = scanner.nextInt();</span>
+<span class="nc bnc" id="L963" title="All 2 branches missed.">				if (Validator.isValidIndex(index, limit)) {</span>
+<span class="nc" id="L964">					validateIndex = true;</span>
+				} else {
+<span class="nc" id="L966">					System.out.println(StringConstants.ENTER_VALID_USER_INDEX);</span>
+<span class="nc" id="L967">					validateIndex = false;</span>
+				}
+<span class="nc" id="L969">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L970">				System.out.println(StringConstants.ENTER_VALID_INPUT);</span>
+<span class="nc" id="L971">				scanner.next();</span>
+<span class="nc" id="L972">			}</span>
+		}
+<span class="nc" id="L974">		String userId = users.get(index - 1).getUserId();</span>
+<span class="nc" id="L975">		String role = users.get(index - 1).getRole().toString();</span>
+<span class="nc bnc" id="L976" title="All 4 branches missed.">		if (role.equals(StringConstants.ADMIN) || role.equals(StringConstants.FACULTY)) {</span>
+<span class="nc" id="L977">			System.out.println(StringConstants.ENTER_VALID_ID);</span>
+<span class="nc" id="L978">			return;</span>
+		}
+<span class="nc" id="L980">		feeController.calculateFine(userId);</span>
+<span class="nc" id="L981">	}</span>
+
+	public void logout() {
+<span class="nc" id="L984">		App.main(null);</span>
+<span class="nc" id="L985">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

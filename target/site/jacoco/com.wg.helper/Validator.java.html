@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Validator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.helper</a> &gt; <span class="el_source">Validator.java</span></div><h1>Validator.java</h1><pre class="source lang-java linenums">package com.wg.helper;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+<span class="nc" id="L9">public class Validator {</span>
+<span class="nc" id="L10">	static Scanner scanner = new Scanner(System.in);</span>
+
+	public static boolean isValid(String email) {
+<span class="nc" id="L13">		String emailRegex = &quot;^[a-zA-Z0-9_+&amp;*-]+(?:\\.&quot; + &quot;[a-zA-Z0-9_+&amp;*-]+)*@&quot; + &quot;(?:[a-zA-Z0-9-]+\\.)+[a-z&quot;</span>
+				+ &quot;A-Z]{2,7}$&quot;;
+
+<span class="nc" id="L16">		Pattern pat = Pattern.compile(emailRegex);</span>
+<span class="nc bnc" id="L17" title="All 2 branches missed.">		if (email == null) {</span>
+<span class="nc" id="L18">			return false;</span>
+		}
+<span class="nc" id="L20">		return pat.matcher(email).matches();</span>
+	}
+
+	public static boolean isValidString(String str) {
+<span class="nc bnc" id="L24" title="All 2 branches missed.">		if (str == null) {</span>
+<span class="nc" id="L25">			return false;</span>
+		}
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		return !str.trim().isEmpty();</span>
+	}
+
+	public static boolean isValidAge(int age) {
+<span class="nc bnc" id="L31" title="All 4 branches missed.">		if (age &gt; 0 &amp;&amp; age &lt;= 150) {</span>
+<span class="nc" id="L32">			return true;</span>
+		}
+<span class="nc" id="L34">		return false;</span>
+	}
+
+	public static boolean isValidGender(String gender) {
+<span class="nc bnc" id="L38" title="All 2 branches missed.">		if (gender == null) {</span>
+<span class="nc" id="L39">			return false;</span>
+		}
+<span class="nc bnc" id="L41" title="All 4 branches missed.">		return gender.equalsIgnoreCase(&quot;M&quot;) || gender.equalsIgnoreCase(&quot;F&quot;);</span>
+	}
+
+	public static boolean isValidContactNo(String contactNo) {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">		if (contactNo == null) {</span>
+<span class="nc" id="L46">			return false;</span>
+		}
+<span class="nc" id="L48">		Pattern PHONE_NUMBER_PATTERN = Pattern.compile(&quot;^\\d{10}$&quot;);</span>
+<span class="nc" id="L49">		Matcher matcher = PHONE_NUMBER_PATTERN.matcher(contactNo);</span>
+
+<span class="nc bnc" id="L51" title="All 4 branches missed.">		return matcher.matches() &amp;&amp; !contactNo.equals(&quot;0000000000&quot;);</span>
+	}
+
+	public static boolean isValidRole(String role) {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		if (role == null) {</span>
+<span class="nc" id="L56">			return false;</span>
+		}
+<span class="nc bnc" id="L58" title="All 6 branches missed.">		return role.equalsIgnoreCase(&quot;Admin&quot;) || role.equalsIgnoreCase(&quot;Student&quot;) || role.equalsIgnoreCase(&quot;Faculty&quot;);</span>
+	}
+
+	public static int getUserChoice() {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		while (!scanner.hasNextInt()) {</span>
+<span class="nc" id="L63">			System.out.println(&quot;Invalid input. Please enter a Valid Input&quot;);</span>
+<span class="nc" id="L64">			scanner.next();</span>
+<span class="nc" id="L65">			System.out.print(&quot;Enter your choice: &quot;);</span>
+		}
+<span class="nc" id="L67">		return scanner.nextInt();</span>
+	}
+
+	public static boolean isValidDate(LocalDate endDate) {
+<span class="nc" id="L71">		return false;</span>
+	}
+
+	public static boolean isValidIndex(int index, int limit) {
+<span class="nc bnc" id="L75" title="All 4 branches missed.">		if (index &gt; 0 &amp;&amp; index &lt;= limit) {</span>
+<span class="nc" id="L76">			return true;</span>
+		}
+<span class="nc" id="L78">		return false;</span>
+	}
+
+	public static LocalDate ValidateDate(LocalDate startDate) {
+<span class="nc" id="L82">		LocalDate endDate = null;</span>
+<span class="nc" id="L83">		boolean validDate = false;</span>
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		while (!validDate) {</span>
+<span class="nc" id="L86">			System.out.println(&quot;Enter Leave till date (YYYY-MM-DD):&quot;);</span>
+<span class="nc" id="L87">			String dateString = scanner.next();</span>
+<span class="nc" id="L88">			scanner.nextLine();</span>
+			try {
+<span class="nc" id="L90">				endDate = LocalDate.parse(dateString);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">				if (endDate.isAfter(startDate)) {</span>
+<span class="nc" id="L92">					validDate = true;</span>
+				} else {
+<span class="nc" id="L94">					System.out.println(&quot;Error: End date must be after the start date. Please enter a valid date.&quot;);</span>
+				}
+<span class="nc" id="L96">			} catch (DateTimeParseException e) {</span>
+<span class="nc" id="L97">				System.out.println(&quot;Error: Invalid date format. Please enter the date in YYYY-MM-DD format.&quot;);</span>
+<span class="nc" id="L98">			}</span>
+<span class="nc" id="L99">		}</span>
+<span class="nc" id="L100">		return endDate;</span>
+	}
+
+<span class="nc" id="L103">	private static final Pattern USERNAME_PATTERN = Pattern.compile(&quot;^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{4,30}$&quot;);</span>
+
+	public static boolean isValidUsername(String username) {
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		if (username == null) {</span>
+<span class="nc" id="L107">			return false;</span>
+		}
+<span class="nc" id="L109">		Matcher matcher = USERNAME_PATTERN.matcher(username);</span>
+<span class="nc" id="L110">		return matcher.matches();</span>
+	}
+
+	public static boolean isValidName(String name) {
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (name == null) {</span>
+<span class="nc" id="L115">			return false;</span>
+		}
+		// Trim the name to remove any leading or trailing whitespace
+<span class="nc" id="L118">		String trimmedName = name.trim();</span>
+		// Check if the trimmed name is not empty and contains only alphabetic
+		// characters
+<span class="nc bnc" id="L121" title="All 4 branches missed.">		return !trimmedName.isEmpty() &amp;&amp; trimmedName.matches(&quot;[a-zA-Z]+&quot;);</span>
+	}
+
+<span class="nc" id="L124">	private static final Pattern ROLL_NUMBER_PATTERN = Pattern.compile(&quot;^(?=.*[a-zA-Z])(?=.*\\d)[A-Za-z\\d]{4}$&quot;);</span>
+
+	public static boolean isValidRollNumber(String rollNo) {
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		if (rollNo == null) {</span>
+<span class="nc" id="L128">			return false;</span>
+		}
+<span class="nc bnc" id="L130" title="All 4 branches missed.">		return rollNo.length() == 4 &amp;&amp; ROLL_NUMBER_PATTERN.matcher(rollNo).matches();</span>
+	}
+
+	public static boolean isValidAddress(String address) {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">		if (address == null) {</span>
+<span class="nc" id="L135">			return false;</span>
+		}
+		// Trim the address to remove any leading or trailing whitespace
+<span class="nc" id="L138">		String trimmedAddress = address.trim();</span>
+		// Check if the trimmed address is not empty and is within a reasonable length
+		// For example, consider a reasonable length between 5 and 100 characters
+<span class="nc bnc" id="L141" title="All 6 branches missed.">		if (trimmedAddress.isEmpty() || trimmedAddress.length() &lt; 5 || trimmedAddress.length() &gt; 100) {</span>
+<span class="nc" id="L142">			return false;</span>
+		}
+<span class="nc" id="L144">		String addressPattern = &quot;^[a-zA-Z0-9\\s,.-/]+$&quot;;</span>
+<span class="nc" id="L145">		return trimmedAddress.matches(addressPattern);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.wg.model;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public class User {
+	private String userId;
+	private String name;
+	private LocalDate dob;
+	private String contactNumber;
+	private Role role;
+	private String password;
+	private int standard;
+	private String address;
+	private String username;
+	private int age;
+	private String email;
+	private String gender;
+	private String rollNo;
+	private List&lt;Integer&gt; assignedToStandard;
+	private int mentorOf;
+
+	// Constructors
+<span class="fc" id="L24">	public User() {</span>
+<span class="fc" id="L25">	}</span>
+
+<span class="nc" id="L27">	public User(String userId, String name, String email) {</span>
+<span class="nc" id="L28">		this.userId = userId;</span>
+<span class="nc" id="L29">		this.name = name;</span>
+<span class="nc" id="L30">		this.email = email;</span>
+<span class="nc" id="L31">	}</span>
+
+<span class="nc" id="L33">	public User(String userId, String name, String email, String password) {</span>
+<span class="nc" id="L34">		this.userId = userId;</span>
+<span class="nc" id="L35">		this.name = name;</span>
+<span class="nc" id="L36">		this.email = email;</span>
+<span class="nc" id="L37">		this.password = password;</span>
+<span class="nc" id="L38">	}</span>
+
+<span class="nc" id="L40">	public User(String userId, String name, int age, String password, String email, Role role) {</span>
+<span class="nc" id="L41">		this.userId = userId;</span>
+<span class="nc" id="L42">		this.name = name;</span>
+<span class="nc" id="L43">		this.email = email;</span>
+<span class="nc" id="L44">		this.age = age;</span>
+<span class="nc" id="L45">		this.password = password;</span>
+<span class="nc" id="L46">		this.role = role;</span>
+<span class="nc" id="L47">	}</span>
+
+<span class="nc" id="L49">	public User(String userId, String name, String email, int age, int standard) {</span>
+<span class="nc" id="L50">		this.userId = userId;</span>
+<span class="nc" id="L51">		this.name = name;</span>
+<span class="nc" id="L52">		this.email = email;</span>
+<span class="nc" id="L53">		this.age = age;</span>
+<span class="nc" id="L54">		this.standard = standard;</span>
+<span class="nc" id="L55">	}</span>
+
+<span class="nc" id="L57">	public User(String userId, String username, String name, int age, String password, String email, Role role) {</span>
+<span class="nc" id="L58">		this.userId = userId;</span>
+<span class="nc" id="L59">		this.username = username;</span>
+<span class="nc" id="L60">		this.name = name;</span>
+<span class="nc" id="L61">		this.email = email;</span>
+<span class="nc" id="L62">		this.age = age;</span>
+<span class="nc" id="L63">		this.password = password;</span>
+<span class="nc" id="L64">		this.role = role;</span>
+<span class="nc" id="L65">	}</span>
+
+	public User(String userId, String username, String name, int age, String password, String email, Role role,
+<span class="nc" id="L68">			LocalDate date, String contactNumber, int standard, String gender, String rollNo, int mentorOf) {</span>
+<span class="nc" id="L69">		this.userId = userId;</span>
+<span class="nc" id="L70">		this.username = username;</span>
+<span class="nc" id="L71">		this.name = name;</span>
+<span class="nc" id="L72">		this.age = age;</span>
+<span class="nc" id="L73">		this.password = password;</span>
+<span class="nc" id="L74">		this.email = email;</span>
+<span class="nc" id="L75">		this.role = role;</span>
+<span class="nc" id="L76">		this.dob = date;</span>
+<span class="nc" id="L77">		this.contactNumber = contactNumber;</span>
+<span class="nc" id="L78">		this.standard = standard;</span>
+<span class="nc" id="L79">		this.gender = gender;</span>
+<span class="nc" id="L80">		this.rollNo = rollNo;</span>
+<span class="nc" id="L81">		this.mentorOf = mentorOf;</span>
+<span class="nc" id="L82">	}</span>
+
+<span class="nc" id="L84">	public User(String userId, String name) {</span>
+<span class="nc" id="L85">		this.userId = userId;</span>
+<span class="nc" id="L86">		this.name = name;</span>
+<span class="nc" id="L87">	}</span>
+
+	// getter setters
+	public String getUserId() {
+<span class="fc" id="L91">		return userId;</span>
+	}
+
+	public void setUserId(String userId) {
+<span class="fc" id="L95">		this.userId = userId;</span>
+<span class="fc" id="L96">	}</span>
+
+	public String getUsername() {
+<span class="fc" id="L99">		return username;</span>
+	}
+
+	public void setUsername(String username) {
+<span class="fc" id="L103">		this.username = username;</span>
+<span class="fc" id="L104">	}</span>
+
+	public String getName() {
+<span class="fc" id="L107">		return name;</span>
+	}
+
+	public void setName(String name) {
+<span class="fc" id="L111">		this.name = name;</span>
+<span class="fc" id="L112">	}</span>
+
+	public String getGender() {
+<span class="fc" id="L115">		return gender;</span>
+	}
+
+	public void setGender(String gender) {
+<span class="fc" id="L119">		this.gender = gender;</span>
+<span class="fc" id="L120">	}</span>
+
+	public LocalDate getDOB() {
+<span class="fc" id="L123">		return dob;</span>
+	}
+
+	public void setDOB(LocalDate dateOfBirth) {
+<span class="fc" id="L127">		this.dob = dateOfBirth;</span>
+<span class="fc" id="L128">	}</span>
+
+	public String getContactNumber() {
+<span class="fc" id="L131">		return contactNumber;</span>
+	}
+
+	public void setContactNumber(String contactNumber) {
+<span class="fc" id="L135">		this.contactNumber = contactNumber;</span>
+<span class="fc" id="L136">	}</span>
+
+	public String getPassword() {
+<span class="fc" id="L139">		return password;</span>
+	}
+
+	public void setPassword(String password) {
+<span class="fc" id="L143">		this.password = password;</span>
+<span class="fc" id="L144">	}</span>
+
+	public int getStandard() {
+<span class="fc" id="L147">		return standard;</span>
+	}
+
+	public void setStandard(int standard) {
+<span class="fc" id="L151">		this.standard = standard;</span>
+<span class="fc" id="L152">	}</span>
+
+	public String getAddress() {
+<span class="fc" id="L155">		return address;</span>
+	}
+
+	public void setAddress(String address) {
+<span class="fc" id="L159">		this.address = address;</span>
+<span class="fc" id="L160">	}</span>
+
+	public int getAge() {
+<span class="fc" id="L163">		return age;</span>
+	}
+
+	public void setAge(int age) {
+<span class="fc" id="L167">		this.age = age;</span>
+<span class="fc" id="L168">	}</span>
+
+	public String getEmail() {
+<span class="fc" id="L171">		return email;</span>
+	}
+
+	public void setEmail(String email) {
+<span class="fc" id="L175">		this.email = email;</span>
+<span class="fc" id="L176">	}</span>
+
+	public String getRollNo() {
+<span class="fc" id="L179">		return rollNo;</span>
+	}
+
+	public void setRollNo(String rollNo) {
+<span class="fc" id="L183">		this.rollNo = rollNo;</span>
+<span class="fc" id="L184">	}</span>
+
+	public int getMentorOf() {
+<span class="fc" id="L187">		return mentorOf;</span>
+	}
+
+	public void setMentorOf(int mentorOf) {
+<span class="fc" id="L191">		this.mentorOf = mentorOf;</span>
+<span class="fc" id="L192">	}</span>
+
+	public Role getRole() {
+<span class="fc" id="L195">		return role;</span>
+	}
+
+	public void setRole(Role role) {
+<span class="fc" id="L199">		this.role = role;</span>
+<span class="fc" id="L200">	}</span>
+
+//	@Override
+//	public String toString() {
+//		return &quot;User{&quot; + &quot;name='&quot; + name + '\'' + &quot;, username='&quot; + username + '\'' + &quot;, dateOfBirth='&quot; + dob + '\''
+//				+ &quot;, contactNumber='&quot; + contactNumber + '\'' + &quot;, role=&quot; + role + &quot;, password='&quot; + password + '\''
+//				+ &quot;, standard=&quot; + standard + &quot;, age=&quot; + age + &quot;, email='&quot; + email + '\'' + &quot;, gender='&quot; + gender + '\''
+//				+ &quot;, rollNo='&quot; + rollNo + '\'' + &quot;, mentorOf=&quot; + mentorOf + &quot;, address='&quot; + address + '\'' + '}';
+//	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

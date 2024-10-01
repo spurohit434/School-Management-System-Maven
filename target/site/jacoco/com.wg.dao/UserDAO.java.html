@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.dao</a> &gt; <span class="el_source">UserDAO.java</span></div><h1>UserDAO.java</h1><pre class="source lang-java linenums">package com.wg.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.wg.constants.UserConstants;
+import com.wg.model.Role;
+import com.wg.model.User;
+
+public class UserDAO extends GenericDAO&lt;User&gt; {
+<span class="fc" id="L14">	public UserDAO() {</span>
+<span class="fc" id="L15">	}</span>
+
+	@Override
+	public User mapResultSetToEntity(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L19">		User user = new User();</span>
+<span class="fc" id="L20">		user.setUserId(resultSet.getString(UserConstants.USER_ID_COLUMN));</span>
+<span class="fc" id="L21">		user.setName(resultSet.getString(UserConstants.NAME_COLUMN));</span>
+<span class="fc" id="L22">		user.setEmail(resultSet.getString(UserConstants.EMAIL_COLUMN));</span>
+<span class="fc" id="L23">		user.setUsername(resultSet.getString(UserConstants.USERNAME_COLUMN));</span>
+<span class="fc" id="L24">		user.setPassword(resultSet.getString(UserConstants.PASSWORD_COLUMN));</span>
+<span class="fc" id="L25">		user.setAge(resultSet.getInt(UserConstants.AGE_COLUMN));</span>
+<span class="fc" id="L26">		user.setGender(resultSet.getString(UserConstants.GENDER_COLUMN));</span>
+<span class="fc" id="L27">		user.setContactNumber(resultSet.getString(UserConstants.CONTACT_NO_COLUMN));</span>
+<span class="fc" id="L28">		user.setAddress(resultSet.getString(UserConstants.ADDRESS_COLUMN));</span>
+<span class="fc" id="L29">		user.setRole(Role.valueOf(resultSet.getString(UserConstants.ROLE_COLUMN)));</span>
+<span class="fc" id="L30">		user.setDOB(resultSet.getDate(UserConstants.DOB_COLUMN).toLocalDate());</span>
+<span class="fc" id="L31">		user.setStandard(resultSet.getInt(UserConstants.STANDARD_COLUMN));</span>
+<span class="fc" id="L32">		user.setRollNo(resultSet.getString(UserConstants.ROLL_NO_COLUMN));</span>
+<span class="fc" id="L33">		user.setMentorOf(resultSet.getInt(UserConstants.MENTOR_OF_COLUMN));</span>
+<span class="fc" id="L34">		return user;</span>
+	}
+
+	public boolean addUser(User user) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L38">		String sqlQuery = String.format(</span>
+				&quot;INSERT INTO User (UserId, username, name, age, password, email, role, dob, contactNumber, standard, gender, rollNo, mentorOf) VALUES ('%s','%s','%s','%s','%s','%s','%s', '%s','%s','%s','%s', '%s','%s')&quot;,
+<span class="fc" id="L40">				user.getUserId(), user.getUsername(), user.getName(), user.getAge(), user.getPassword(),</span>
+<span class="fc" id="L41">				user.getEmail(), user.getRole().toString(), user.getDOB(), user.getContactNumber(), user.getStandard(),</span>
+<span class="fc" id="L42">				user.getGender(), user.getRollNo(), user.getMentorOf());</span>
+
+<span class="fc" id="L44">		return executeQuery(sqlQuery);</span>
+	}
+
+	public User getUserById(String userId) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L48">		String selectSQL = &quot;SELECT * FROM User WHERE userid = \&quot;&quot; + userId + &quot;\&quot;&quot;;</span>
+<span class="fc" id="L49">		return executeGetQuery(selectSQL);</span>
+	}
+
+	public User getUserByUsername(String username) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L53">		String selectSQL = &quot;SELECT * FROM User WHERE username = \&quot;&quot; + username + &quot;\&quot;&quot;;</span>
+<span class="nc" id="L54">		return executeGetQuery(selectSQL);</span>
+	}
+
+	public List&lt;User&gt; getClassDetails(int standard) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L58">		String selectSQL = &quot;SELECT * FROM User WHERE standard = \&quot;&quot; + standard + &quot;\&quot;&quot;;</span>
+<span class="nc" id="L59">		return executeGetAllQuery(selectSQL);</span>
+	}
+
+	public boolean deleteUser(String id) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L63">		String selectSQL = &quot;DELETE FROM User WHERE userid = \&quot;&quot; + id + &quot;\&quot;&quot;;</span>
+<span class="fc" id="L64">		return executeQuery(selectSQL);</span>
+	}
+
+	public List&lt;User&gt; getAllUser() throws SQLException, ClassNotFoundException {
+<span class="fc" id="L68">		String selectSQL = &quot;SELECT * FROM User&quot;;</span>
+<span class="fc" id="L69">		return executeGetAllQuery(selectSQL);</span>
+	}
+
+	public boolean updateUser(User user, String userId, String columnToUpdate)
+			throws SQLException, ClassNotFoundException {
+<span class="fc" id="L74">		Map&lt;String, Object&gt; fieldMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L75">		fieldMap.put(&quot;UserId&quot;, user.getUserId());</span>
+<span class="fc" id="L76">		fieldMap.put(&quot;name&quot;, user.getName());</span>
+<span class="fc" id="L77">		fieldMap.put(&quot;dob&quot;, user.getDOB());</span>
+<span class="fc" id="L78">		fieldMap.put(&quot;contactNumber&quot;, user.getContactNumber());</span>
+<span class="fc" id="L79">		fieldMap.put(&quot;role&quot;, user.getRole());</span>
+<span class="fc" id="L80">		fieldMap.put(&quot;password&quot;, user.getPassword());</span>
+<span class="fc" id="L81">		fieldMap.put(&quot;standard&quot;, user.getStandard());</span>
+<span class="fc" id="L82">		fieldMap.put(&quot;address&quot;, user.getAddress());</span>
+<span class="fc" id="L83">		fieldMap.put(&quot;username&quot;, user.getUsername());</span>
+<span class="fc" id="L84">		fieldMap.put(&quot;age&quot;, user.getAge());</span>
+<span class="fc" id="L85">		fieldMap.put(&quot;email&quot;, user.getEmail());</span>
+<span class="fc" id="L86">		fieldMap.put(&quot;gender&quot;, user.getGender());</span>
+<span class="fc" id="L87">		fieldMap.put(&quot;rollNo&quot;, user.getRollNo());</span>
+<span class="fc" id="L88">		fieldMap.put(&quot;mentorOf&quot;, user.getMentorOf());</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">		if (fieldMap.containsKey(columnToUpdate)) {</span>
+<span class="fc" id="L90">			Object value = fieldMap.get(columnToUpdate);</span>
+<span class="fc" id="L91">			String sqlQuery = String.format(&quot;UPDATE User SET %s = '%s' WHERE userId = '%s'&quot;, columnToUpdate, value,</span>
+					userId);
+<span class="fc" id="L93">			return executeQuery(sqlQuery);</span>
+		}
+<span class="nc" id="L95">		return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

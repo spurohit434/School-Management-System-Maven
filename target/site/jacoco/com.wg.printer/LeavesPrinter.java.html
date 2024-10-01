@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LeavesPrinter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.printer</a> &gt; <span class="el_source">LeavesPrinter.java</span></div><h1>LeavesPrinter.java</h1><pre class="source lang-java linenums">package com.wg.printer;
+
+import java.util.List;
+
+import com.wg.model.Leaves;
+
+<span class="nc" id="L7">public class LeavesPrinter {</span>
+	private static final String HEADER_FORMAT = &quot;%5s | %-30s | %-15s | %-15s | %-15s | %-15s | %-5s&quot;;
+	private static final String ROW_FORMAT = &quot;%5d | %-30s | %-15s | %-15s | %-15s | %-15s | %-5s&quot;;
+
+	private static final String BOX_BORDER = &quot;==================================================================================================================================================&quot;;
+	private static final String DIVIDER_LINE = &quot;------------------------------------------------------------------------------------------------------------------------------------------------&quot;;
+
+	public static void printLeaves1(List&lt;Leaves&gt; Leaves, String name, String username, int index) {
+<span class="nc" id="L15">		System.out.println();</span>
+<span class="nc bnc" id="L16" title="All 2 branches missed.">		for (Leaves leave : Leaves) {</span>
+			try {
+<span class="nc" id="L18">				System.out.printf(ROW_FORMAT, index++, leave.getContent(), name, username, leave.getStartDate(),</span>
+<span class="nc" id="L19">						leave.getEndDate(), leave.getStatus());</span>
+<span class="nc" id="L20">				System.out.println();</span>
+<span class="nc" id="L21">			} catch (Exception e) {</span>
+<span class="nc" id="L22">				e.printStackTrace();</span>
+<span class="nc" id="L23">				System.out.println(&quot;Error occurred while printing user: &quot; + leave);</span>
+<span class="nc" id="L24">			}</span>
+<span class="nc" id="L25">		}</span>
+<span class="nc" id="L26">	}</span>
+
+//	public static void printLeaves(List&lt;Leaves&gt; Leaves) {
+//		System.out.println(BOX_BORDER);
+//		System.out.println(centerTextInBox(&quot;Leaves DETAILS&quot;));
+//		System.out.println(BOX_BORDER);
+//
+//		System.out.printf(HEADER_FORMAT, &quot;S.No.&quot;, &quot;Content&quot;, &quot;Start Date&quot;, &quot;End Date&quot;, &quot;Status&quot;);
+//		System.out.println();
+//		System.out.println(DIVIDER_LINE);
+//
+//		int index = 1;
+//		for (Leaves leaves : Leaves) {
+//			try {
+//				System.out.printf(ROW_FORMAT, index++, leaves.getContent(), leaves.getStartDate(),
+//						leaves.getStartDate(), leaves.getStatus());
+//				System.out.println();
+//				System.out.println(DIVIDER_LINE);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				System.out.println(&quot;Error occurred while printing user: &quot; + leaves);
+//			}
+//		}
+//	}
+
+	private static String centerTextInBox(String text) {
+<span class="nc" id="L52">		int boxWidth = BOX_BORDER.length();</span>
+<span class="nc" id="L53">		int textLength = text.length();</span>
+<span class="nc" id="L54">		int padding = (boxWidth - textLength) / 2;</span>
+
+		// Creating a line with centered text surrounded by spaces
+<span class="nc" id="L57">		StringBuilder centeredText = new StringBuilder();</span>
+<span class="nc" id="L58">		centeredText.append(&quot; &quot;.repeat(padding));</span>
+<span class="nc" id="L59">		centeredText.append(text);</span>
+<span class="nc" id="L60">		centeredText.append(&quot; &quot;.repeat(padding));</span>
+
+		// Ensure the line is exactly as wide as the box, accounting for odd width
+<span class="nc bnc" id="L63" title="All 2 branches missed.">		while (centeredText.length() &lt; boxWidth) {</span>
+<span class="nc" id="L64">			centeredText.append(&quot; &quot;);</span>
+		}
+
+<span class="nc" id="L67">		return centeredText.toString();</span>
+	}
+
+	public static void extractedHeader() {
+<span class="nc" id="L71">		System.out.println(BOX_BORDER);</span>
+<span class="nc" id="L72">		System.out.println(centerTextInBox(&quot;Issue DETAILS&quot;));</span>
+<span class="nc" id="L73">		System.out.println(BOX_BORDER);</span>
+<span class="nc" id="L74">		System.out.printf(HEADER_FORMAT, &quot;S.No.&quot;, &quot;Content&quot;, &quot;Name&quot;, &quot;Username&quot;, &quot;Start Date&quot;, &quot;End Date&quot;, &quot;Status&quot;);</span>
+<span class="nc" id="L75">		System.out.println();</span>
+<span class="nc" id="L76">	}</span>
+
+	public static void extractedFooter() {
+<span class="nc" id="L79">		System.out.println(DIVIDER_LINE);</span>
+<span class="nc" id="L80">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

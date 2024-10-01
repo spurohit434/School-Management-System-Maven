@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IssueService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.services</a> &gt; <span class="el_source">IssueService.java</span></div><h1>IssueService.java</h1><pre class="source lang-java linenums">package com.wg.services;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Logger;
+
+import com.wg.dao.IssueDAO;
+import com.wg.helper.LoggingUtil;
+import com.wg.model.Issue;
+
+public class IssueService {
+<span class="fc" id="L12">	private IssueDAO issueDAO = new IssueDAO();</span>
+<span class="fc" id="L13">	Logger logger = LoggingUtil.getLogger(IssueService.class);</span>
+//	logger.severe(e.getMessage());
+
+<span class="fc" id="L16">	public IssueService() {</span>
+<span class="fc" id="L17">	}</span>
+
+//	public IssueService(IssueDAO issueDAO) {
+//		this.issueDAO = issueDAO; 
+//	}
+
+	public void raiseIssue(Issue issue) {
+<span class="fc" id="L24">		boolean flag = false;</span>
+		try {
+<span class="fc" id="L26">			flag = issueDAO.raiseIssue(issue);</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">			if (flag == true) {</span>
+<span class="fc" id="L28">				System.out.println(&quot;Issue raised Successfully&quot;);</span>
+			} else {
+<span class="fc" id="L30">				System.out.println(&quot;Error raising issue&quot;);</span>
+			}
+<span class="nc" id="L32">		} catch (ClassNotFoundException | SQLException e) {</span>
+<span class="nc" id="L33">			logger.severe(e.getMessage());</span>
+<span class="nc" id="L34">			e.printStackTrace();</span>
+<span class="fc" id="L35">		}</span>
+<span class="fc" id="L36">	}</span>
+
+	public void resolveIssue(String userId) {
+<span class="fc" id="L39">		boolean flag = false;</span>
+		try {
+<span class="fc" id="L41">			flag = issueDAO.resolveIssue(userId);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">			if (flag == true) {</span>
+<span class="fc" id="L43">				System.out.println(&quot;Issue resolved Successfully&quot;);</span>
+			} else {
+<span class="fc" id="L45">				System.out.println(&quot;Error resolving issue&quot;);</span>
+			}
+<span class="nc" id="L47">		} catch (ClassNotFoundException | SQLException e) {</span>
+<span class="nc" id="L48">			logger.severe(e.getMessage());</span>
+<span class="nc" id="L49">			e.printStackTrace();</span>
+<span class="fc" id="L50">		}</span>
+<span class="fc" id="L51">	}</span>
+
+	public List&lt;Issue&gt; checkIssueStatus(String userId) {
+<span class="fc" id="L54">		List&lt;Issue&gt; issue = null;</span>
+		try {
+<span class="fc" id="L56">			issue = issueDAO.checkIssueStatus(userId);</span>
+<span class="fc" id="L57">			return issue;</span>
+<span class="nc" id="L58">		} catch (ClassNotFoundException | SQLException e) {</span>
+<span class="nc" id="L59">			logger.severe(e.getMessage());</span>
+<span class="nc" id="L60">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L62">		return issue;</span>
+	}
+
+	public List&lt;Issue&gt; viewAllIssues() {
+<span class="fc" id="L66">		List&lt;Issue&gt; issue = null;</span>
+		try {
+<span class="fc" id="L68">			issue = issueDAO.viewAllIssues();</span>
+<span class="fc" id="L69">			return issue;</span>
+<span class="nc" id="L70">		} catch (ClassNotFoundException | SQLException e) {</span>
+<span class="nc" id="L71">			logger.severe(e.getMessage());</span>
+<span class="nc" id="L72">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L74">		return issue;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

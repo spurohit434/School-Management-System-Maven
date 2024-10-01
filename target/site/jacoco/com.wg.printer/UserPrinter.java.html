@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserPrinter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.printer</a> &gt; <span class="el_source">UserPrinter.java</span></div><h1>UserPrinter.java</h1><pre class="source lang-java linenums">package com.wg.printer;
+
+import java.util.List;
+
+import com.wg.model.User;
+
+<span class="nc" id="L7">public class UserPrinter {</span>
+//
+//	private static final String HEADER_FORMAT = &quot;%5s | %-15s | %-15s | %-5s | %-20s | %-15s | %-15s&quot;;
+//	private static final String ROW_FORMAT = &quot;%5d | %-15s | %-15s | %d | %-20s | %-15s | %-15s&quot;;
+
+	private static final String HEADER_FORMAT = &quot;%5s | %-15s | %-15s | %3s | %-30s | %-10s | %-15s | %-10s | %-10s | %-15s&quot;;
+	private static final String ROW_FORMAT = &quot;%5d | %-15s | %-15s | %3d | %-30s | %-10s | %-15s | %-10s | %-10s | %-15s&quot;;
+
+	private static final String BOX_BORDER = &quot;==================================================================================================================================================&quot;;
+	private static final String DIVIDER_LINE = &quot;------------------------------------------------------------------------------------------------------------------------------------------------&quot;;
+
+	public static void printUsers(List&lt;User&gt; users) {
+<span class="nc" id="L19">		System.out.println(BOX_BORDER);</span>
+<span class="nc" id="L20">		System.out.println(centerTextInBox(&quot;USER DETAILS&quot;));</span>
+<span class="nc" id="L21">		System.out.println(BOX_BORDER);</span>
+
+<span class="nc" id="L23">		System.out.printf(HEADER_FORMAT, &quot;S.No.&quot;, &quot;Name&quot;, &quot;Username&quot;, &quot;Age&quot;, &quot;Email&quot;, &quot;Gender&quot;, &quot;Contact Number&quot;,</span>
+				&quot;Role&quot;, &quot;Standard&quot;, &quot;mentorOf&quot;);
+<span class="nc" id="L25">		System.out.println();</span>
+<span class="nc" id="L26">		System.out.println(DIVIDER_LINE);</span>
+
+<span class="nc" id="L28">		int index = 1;</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">		for (User user : users) {</span>
+			try {
+<span class="nc" id="L31">				System.out.printf(ROW_FORMAT, index++, user.getName(), user.getUsername(), user.getAge(),</span>
+<span class="nc" id="L32">						user.getEmail(), user.getGender(), user.getContactNumber(), user.getRole().toString(),</span>
+<span class="nc" id="L33">						user.getStandard(), user.getMentorOf());</span>
+<span class="nc" id="L34">				System.out.println();</span>
+<span class="nc" id="L35">				System.out.println(DIVIDER_LINE);</span>
+<span class="nc" id="L36">			} catch (Exception e) {</span>
+<span class="nc" id="L37">				e.printStackTrace();</span>
+<span class="nc" id="L38">				System.out.println(&quot;Error occurred while printing user: &quot; + user);</span>
+<span class="nc" id="L39">			}</span>
+<span class="nc" id="L40">		}</span>
+<span class="nc" id="L41">	}</span>
+
+	private static String centerTextInBox(String text) {
+<span class="nc" id="L44">		int boxWidth = BOX_BORDER.length();</span>
+<span class="nc" id="L45">		int textLength = text.length();</span>
+<span class="nc" id="L46">		int padding = (boxWidth - textLength) / 2;</span>
+<span class="nc" id="L47">		StringBuilder centeredText = new StringBuilder();</span>
+<span class="nc" id="L48">		centeredText.append(&quot; &quot;.repeat(padding));</span>
+<span class="nc" id="L49">		centeredText.append(text);</span>
+<span class="nc" id="L50">		centeredText.append(&quot; &quot;.repeat(padding));</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		while (centeredText.length() &lt; boxWidth) {</span>
+<span class="nc" id="L52">			centeredText.append(&quot; &quot;);</span>
+		}
+
+<span class="nc" id="L55">		return centeredText.toString();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

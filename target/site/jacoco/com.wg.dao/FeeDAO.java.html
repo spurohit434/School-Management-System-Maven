@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FeeDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SchoolManagementSystemMaven2</a> &gt; <a href="index.source.html" class="el_package">com.wg.dao</a> &gt; <span class="el_source">FeeDAO.java</span></div><h1>FeeDAO.java</h1><pre class="source lang-java linenums">package com.wg.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.wg.model.Fee;
+
+public class FeeDAO extends GenericDAO&lt;Fee&gt; {
+
+	public FeeDAO() {
+<span class="fc" id="L11">		super();</span>
+<span class="fc" id="L12">	}</span>
+
+	@Override
+	protected Fee mapResultSetToEntity(ResultSet resultSet) throws SQLException {
+<span class="fc" id="L16">		Fee feeRecord = new Fee();</span>
+<span class="fc" id="L17">		feeRecord.setStudentId(resultSet.getString(&quot;studentId&quot;)); // Replace with actual column name</span>
+<span class="fc" id="L18">		feeRecord.setFeeAmount(resultSet.getDouble(&quot;feeAmount&quot;)); // Replace with actual column name</span>
+<span class="fc" id="L19">		feeRecord.setDeadline(resultSet.getDate(&quot;deadline&quot;).toLocalDate());</span>
+<span class="fc" id="L20">		feeRecord.setFine(resultSet.getDouble(&quot;fine&quot;));</span>
+<span class="fc" id="L21">		return feeRecord;</span>
+	}
+
+	public Fee checkFees(String studentId) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L25">		String selectSQL = String.format(&quot;SELECT * FROM Fees WHERE studentId = '%s'&quot;, studentId);</span>
+<span class="fc" id="L26">		Fee fee = executeGetQuery(selectSQL);</span>
+<span class="fc" id="L27">		return fee;</span>
+	}
+
+	public boolean payFees(String studentId) throws SQLException, ClassNotFoundException {
+<span class="fc" id="L31">		String updateSQL = String.format(&quot;UPDATE Fees SET feeAmount = 0, fine = 0 WHERE studentId = '%s'&quot;, studentId);</span>
+<span class="fc" id="L32">		return executeQuery(updateSQL);</span>
+	}
+
+	public boolean insertFees(Fee fee) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L36">		String addSQL = String.format(</span>
+				&quot;INSERT INTO Fees (studentId, feeAmount, deadline, fine) VALUES ('%s', '%s', '%s', '%s')&quot;,
+<span class="fc" id="L38">				fee.getStudentId(), fee.getFeeAmount(), fee.getDeadline(), fee.getFine());</span>
+<span class="fc" id="L39">		boolean flag = executeQuery(addSQL);</span>
+<span class="fc" id="L40">		return flag;</span>
+	}
+
+	public boolean updateFees(Fee fee) throws ClassNotFoundException, SQLException {
+<span class="fc" id="L44">		String updateSQL = String.format(</span>
+				&quot;UPDATE Fees SET feeAmount = '%s', deadline = '%s', fine = '%s' WHERE studentId = '%s'&quot;,
+<span class="fc" id="L46">				fee.getFeeAmount(), fee.getDeadline(), fee.getFine(), fee.getStudentId());</span>
+<span class="fc" id="L47">		boolean flag = executeQuery(updateSQL);</span>
+<span class="fc" id="L48">		return flag;</span>
+	}
+
+	public Fee calculateFine(String studentId) throws SQLException, ClassNotFoundException {
+<span class="nc" id="L52">		String selectSQL = String.format(&quot;SELECT * FROM Fees WHERE studentId = '%s'&quot;, studentId);</span>
+<span class="nc" id="L53">		Fee fee = executeGetQuery(selectSQL);</span>
+<span class="nc" id="L54">		return fee;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
